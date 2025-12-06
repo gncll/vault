@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
       contentType = 'application/json'
     }
 
-    return new NextResponse(content, {
+    return new NextResponse(content.buffer, {
       headers: {
         'Content-Type': contentType,
         'Cache-Control': 'public, max-age=3600', // Cache for 1 hour
