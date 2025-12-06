@@ -24,7 +24,7 @@ async function fetchGitHubFile(path: string): Promise<any> {
 
   const response = await fetch(url, {
     headers,
-    next: { revalidate: 300 } // Revalidate every 5 minutes
+    next: { revalidate: 10 } // Revalidate every 10 seconds
   })
 
   if (!response.ok) {
