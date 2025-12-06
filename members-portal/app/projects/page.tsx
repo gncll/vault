@@ -26,7 +26,7 @@ export default async function ProjectsPage() {
 
           {/* Projects List */}
           <div className="py-12 space-y-1">
-            {projects.map((project) => (
+            {projects.map((project: any) => (
               <Link
                 key={project.id}
                 href={`/projects/${project.id}`}

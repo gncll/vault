@@ -26,7 +26,7 @@ export default async function CustomGPTsPage() {
 
           {/* GPTs List */}
           <div className="py-12 space-y-1">
-            {customGPTs.map((gpt) => (
+            {customGPTs.map((gpt: any) => (
               <a
                 key={gpt.id}
                 href={gpt.link}
