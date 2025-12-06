@@ -170,4 +170,4 @@ This project is for personal use with your Substack subscription service.
 
 ---
 
-Built with ❤️ for LearnAI Premium Subscribers
+Built with ❤️ for LearnAIWithMe Premium Subscribers
