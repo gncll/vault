@@ -201,12 +201,26 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
 
         {/* Jupyter Notebook Viewer */}
         {viewMode === 'notebook' && (
-          <div className="border border-gray-200 bg-white">
-            <iframe
-              src={`https://nbviewer.org/urls/vault-nine-dun.vercel.app${project.solutionNotebook}`}
-              className="w-full h-[800px]"
-              title="Jupyter Notebook Viewer"
-            />
+          <div className="border border-gray-200 p-8 bg-white">
+            <h3 className="font-serif text-2xl text-gray-900 mb-6">Jupyter Notebook</h3>
+            <p className="text-sm text-gray-600 mb-8">
+              Download the Jupyter notebook file to run it locally in your preferred environment (Jupyter, VS Code, Google Colab, etc.)
+            </p>
+            <div className="border border-gray-200 p-6 hover:bg-gray-50 transition">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h4 className="font-medium text-gray-900 mb-1">Solution Notebook</h4>
+                  <p className="text-xs text-gray-500 font-mono">Housing.ipynb</p>
+                </div>
+                <a
+                  href={project.solutionNotebook}
+                  download="Housing_Solution.ipynb"
+                  className="border border-gray-900 text-gray-900 px-6 py-2 text-sm hover:bg-gray-900 hover:text-white transition"
+                >
+                  Download Notebook
+                </a>
+              </div>
+            </div>
           </div>
         )}
 
