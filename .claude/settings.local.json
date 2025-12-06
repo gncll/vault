@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app:*)",
+      "Bash(timeout 120 bash -c 'cd members-portal && npx create-next-app@latest . --typescript --tailwind --eslint --app --no-src-dir --import-alias \"\"\"\"@/*\"\"\"\"':*)",
+      "Bash(yes:*)",
+      "Bash(npx create-next-app@latest:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run dev:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

@@ -1,0 +1,23 @@
+[
+  {
+    "id": 1,
+    "name": "Data Analysis Expert",
+    "description": "Analyze datasets and create visualizations",
+    "link": "https://chat.openai.com/g/your-gpt-link-1",
+    "category": "Data Science"
+  },
+  {
+    "id": 2,
+    "name": "Code Review Assistant",
+    "description": "Review code for best practices and improvements",
+    "link": "https://chat.openai.com/g/your-gpt-link-2",
+    "category": "Development"
+  },
+  {
+    "id": 3,
+    "name": "Documentation Writer",
+    "description": "Generate technical documentation",
+    "link": "https://chat.openai.com/g/your-gpt-link-3",
+    "category": "Documentation"
+  }
+]

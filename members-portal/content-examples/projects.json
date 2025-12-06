@@ -1,0 +1,26 @@
+[
+  {
+    "id": 1,
+    "title": "AI-Powered Web Scraper",
+    "description": "Build an intelligent web scraper using Python and AI",
+    "pdfUrl": "/pdfs/web-scraper-project.pdf",
+    "category": "Web Development",
+    "difficulty": "Intermediate"
+  },
+  {
+    "id": 2,
+    "title": "Sentiment Analysis Dashboard",
+    "description": "Create a real-time sentiment analysis dashboard",
+    "pdfUrl": "/pdfs/sentiment-analysis.pdf",
+    "category": "Data Science",
+    "difficulty": "Advanced"
+  },
+  {
+    "id": 3,
+    "title": "Chatbot with RAG",
+    "description": "Develop a chatbot using Retrieval-Augmented Generation",
+    "pdfUrl": "/pdfs/rag-chatbot.pdf",
+    "category": "AI/ML",
+    "difficulty": "Advanced"
+  }
+]
