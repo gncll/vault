@@ -32,42 +32,28 @@ export async function GET(request: NextRequest) {
 
     const data = await response.json()
 
-    // For large files, GitHub returns a download_url instead of content
-    if (data.size > 1000000 || !data.content) {
-      // File is too large, use download_url with authentication
-      if (data.download_url) {
-        const fileResponse = await fetch(data.download_url, {
-          headers: GITHUB_TOKEN ? { 'Authorization': `Bearer ${GITHUB_TOKEN}` } : {}
-        })
+    let content: Buffer
 
-        if (!fileResponse.ok) {
-          return NextResponse.json({ error: 'Failed to download file' }, { status: 500 })
-        }
+    // Check if file has base64 content (smaller files)
+    if (data.content) {
+      // Decode base64 content (Django equivalent: base64.b64decode(file_data["content"]))
+      content = Buffer.from(data.content.replace(/\n/g, ''), 'base64')
+    } else if (data.download_url) {
+      // For larger files or when content is not in the response, use download_url
+      // Django equivalent: requests.get(download_url, headers=headers)
+      const downloadResponse = await fetch(data.download_url, {
+        headers: GITHUB_TOKEN ? { 'Authorization': `Bearer ${GITHUB_TOKEN}` } : {}
+      })
 
-        const content = await fileResponse.arrayBuffer()
-
-        let contentType = 'application/octet-stream'
-        if (filePath.endsWith('.pdf')) {
-          contentType = 'application/pdf'
-        } else if (filePath.endsWith('.csv')) {
-          contentType = 'text/csv'
-        } else if (filePath.endsWith('.ipynb')) {
-          contentType = 'application/json'
-        }
-
-        return new NextResponse(content, {
-          headers: {
-            'Content-Type': contentType,
-            'Cache-Control': 'public, max-age=3600',
-          },
-        })
+      if (!downloadResponse.ok) {
+        return NextResponse.json({ error: 'Failed to download file' }, { status: 500 })
       }
 
-      return NextResponse.json({ error: 'File too large and no download URL' }, { status: 413 })
+      const arrayBuffer = await downloadResponse.arrayBuffer()
+      content = Buffer.from(arrayBuffer)
+    } else {
+      return NextResponse.json({ error: 'File content not available' }, { status: 404 })
     }
-
-    // Decode base64 content for smaller files
-    const content = Buffer.from(data.content, 'base64')
 
     // Determine content type based on file extension
     let contentType = 'application/octet-stream'
