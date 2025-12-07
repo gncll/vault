@@ -87,36 +87,42 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
             >
               Slides
             </button>
-            <button
-              onClick={() => setViewMode('solution')}
-              className={`px-4 py-2 text-sm transition border-b-2 ${
-                viewMode === 'solution'
-                  ? 'border-gray-900 text-gray-900 font-medium'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Solution PDF
-            </button>
-            <button
-              onClick={() => setViewMode('notebook')}
-              className={`px-4 py-2 text-sm transition border-b-2 ${
-                viewMode === 'notebook'
-                  ? 'border-gray-900 text-gray-900 font-medium'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Jupyter Notebook
-            </button>
-            <button
-              onClick={() => setViewMode('data')}
-              className={`px-4 py-2 text-sm transition border-b-2 ${
-                viewMode === 'data'
-                  ? 'border-gray-900 text-gray-900 font-medium'
-                  : 'border-transparent text-gray-600 hover:text-gray-900'
-              }`}
-            >
-              Data Files
-            </button>
+            {project.solutionPdf && (
+              <button
+                onClick={() => setViewMode('solution')}
+                className={`px-4 py-2 text-sm transition border-b-2 ${
+                  viewMode === 'solution'
+                    ? 'border-gray-900 text-gray-900 font-medium'
+                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Solution PDF
+              </button>
+            )}
+            {project.solutionNotebook && (
+              <button
+                onClick={() => setViewMode('notebook')}
+                className={`px-4 py-2 text-sm transition border-b-2 ${
+                  viewMode === 'notebook'
+                    ? 'border-gray-900 text-gray-900 font-medium'
+                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Jupyter Notebook
+              </button>
+            )}
+            {project.data && project.data.length > 0 && (
+              <button
+                onClick={() => setViewMode('data')}
+                className={`px-4 py-2 text-sm transition border-b-2 ${
+                  viewMode === 'data'
+                    ? 'border-gray-900 text-gray-900 font-medium'
+                    : 'border-transparent text-gray-600 hover:text-gray-900'
+                }`}
+              >
+                Data Files
+              </button>
+            )}
           </div>
 
           {/* PDF Controls - Only show for Slides and Solution */}
@@ -200,7 +206,7 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
         )}
 
         {/* Jupyter Notebook Viewer */}
-        {viewMode === 'notebook' && (
+        {viewMode === 'notebook' && project.solutionNotebook && (
           <div className="border border-gray-200 p-8 bg-white">
             <h3 className="font-serif text-2xl text-gray-900 mb-6">Jupyter Notebook</h3>
             <p className="text-sm text-gray-600 mb-8">
@@ -210,11 +216,13 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
               <div className="flex items-center justify-between">
                 <div>
                   <h4 className="font-medium text-gray-900 mb-1">Solution Notebook</h4>
-                  <p className="text-xs text-gray-500 font-mono">Housing.ipynb</p>
+                  <p className="text-xs text-gray-500 font-mono">
+                    {decodeURIComponent(project.solutionNotebook.split('/').pop()?.split('?')[0] || 'notebook.ipynb')}
+                  </p>
                 </div>
                 <a
                   href={project.solutionNotebook}
-                  download="Housing_Solution.ipynb"
+                  download={decodeURIComponent(project.solutionNotebook.split('/').pop()?.split('?')[0] || 'notebook.ipynb')}
                   className="border border-gray-900 text-gray-900 px-6 py-2 text-sm hover:bg-gray-900 hover:text-white transition"
                 >
                   Download Notebook
@@ -225,7 +233,7 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
         )}
 
         {/* Data Files Download Section */}
-        {viewMode === 'data' && (
+        {viewMode === 'data' && project.data && project.data.length > 0 && (
           <div className="border border-gray-200 p-8 bg-white">
             <h3 className="font-serif text-2xl text-gray-900 mb-6">Download Data Files</h3>
             <p className="text-sm text-gray-600 mb-8">
