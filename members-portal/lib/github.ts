@@ -183,8 +183,8 @@ export async function getNews() {
 
     console.log(`[RSS] Parsed ${itemsToProcess.length} items, starting image scraping...`)
 
-    // Scrape images for first 10 items only (to avoid timeout)
-    const scrapePromises = itemsToProcess.slice(0, 10).map(async (item) => {
+    // Scrape images for first 4 items only (to avoid Vercel timeout)
+    const scrapePromises = itemsToProcess.slice(0, 4).map(async (item) => {
       let finalImage = item.imageFromRSS
 
       // Only scrape if placeholder
@@ -209,7 +209,7 @@ export async function getNews() {
     })
 
     // For remaining items, use RSS images
-    const remainingItems = itemsToProcess.slice(10).map((item) => ({
+    const remainingItems = itemsToProcess.slice(4).map((item) => ({
       id: item.url,
       title: item.title,
       url: item.url,
