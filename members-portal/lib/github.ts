@@ -141,11 +141,17 @@ export async function getNews() {
       let url = linkMatch ? linkMatch[1] : ''
       url = url.replace(/&amp;/g, '&')
 
-      if (url.includes('google.com/url?')) {
-        const urlParams = new URL(url).searchParams
-        const actualUrl = urlParams.get('url')
-        if (actualUrl) {
-          url = actualUrl
+      // Extract actual URL from Google redirect
+      if (url.includes('google.com/url')) {
+        try {
+          const urlParams = new URL(url).searchParams
+          const actualUrl = urlParams.get('url')
+          if (actualUrl) {
+            url = actualUrl
+            console.log(`[RSS] Extracted actual URL: ${url.substring(0, 80)}...`)
+          }
+        } catch (e) {
+          console.error('[RSS] Failed to parse Google URL:', url.substring(0, 100))
         }
       }
 
