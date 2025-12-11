@@ -116,9 +116,26 @@ export async function getNews() {
       const entry = entryText.split('</entry>')[0]
 
       // Extract title
-      const titleMatch = entry.match(/<title>([\s\S]*?)<\/title>/)
+      const titleMatch = entry.match(/<title[^>]*>([\s\S]*?)<\/title>/)
       let title = titleMatch ? titleMatch[1].trim() : ''
-      title = title.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim()
+
+      // Remove CDATA wrapper if present
+      title = title.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
+
+      // Strip HTML tags (like <b>, <i>, etc.)
+      title = title.replace(/<[^>]+>/g, '')
+
+      // Decode HTML entities
+      title = title
+        .replace(/&amp;/g, '&')
+        .replace(/&lt;/g, '<')
+        .replace(/&gt;/g, '>')
+        .replace(/&quot;/g, '"')
+        .replace(/&#39;/g, "'")
+        .replace(/&apos;/g, "'")
+        .replace(/&#x27;/g, "'")
+        .replace(/&nbsp;/g, ' ')
+        .trim()
 
       // Extract link
       const linkMatch = entry.match(/<link[^>]*href="([^"]*)"/)
