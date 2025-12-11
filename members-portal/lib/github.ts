@@ -87,11 +87,69 @@ export async function getPromptDetails(id: string) {
 
 export async function getNews() {
   try {
-    const data = await fetchGitHubFile('news.json')
+    const RSS_FEED_URL = 'https://www.google.com/alerts/feeds/07865441541560530355/2686190139518355406'
+
+    const response = await fetch(RSS_FEED_URL, {
+      next: { revalidate: 300 } // Cache for 5 minutes
+    })
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch RSS feed: ${response.status}`)
+    }
+
+    const xmlText = await response.text()
+
+    // Parse XML using basic string parsing (no external dependencies)
+    const items: any[] = []
+
+    // Split by entry tags
+    const entries = xmlText.split('<entry>').slice(1) // Skip first element (before first entry)
+
+    for (const entryText of entries) {
+      const entry = entryText.split('</entry>')[0]
+
+      // Extract title
+      const titleMatch = entry.match(/<title>([\s\S]*?)<\/title>/)
+      let title = titleMatch ? titleMatch[1].trim() : ''
+
+      // Remove CDATA tags if present
+      title = title.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim()
+
+      // Extract link
+      const linkMatch = entry.match(/<link[^>]*href="([^"]*)"/)
+      const url = linkMatch ? linkMatch[1] : ''
+
+      // Extract published date
+      const publishedMatch = entry.match(/<published>(.*?)<\/published>/)
+      const published = publishedMatch ? publishedMatch[1] : new Date().toISOString()
+
+      // Extract content/description for image
+      const contentMatch = entry.match(/<content[^>]*>([\s\S]*?)<\/content>/)
+      let image = 'https://via.placeholder.com/600x400/f3f4f6/9ca3af?text=AI+News' // Default placeholder
+
+      if (contentMatch) {
+        const content = contentMatch[1]
+        const imgMatch = content.match(/<img[^>]*src="([^"]*)"/)
+        if (imgMatch) {
+          image = imgMatch[1]
+        }
+      }
+
+      if (url) {
+        items.push({
+          id: url, // Use URL as unique ID
+          title,
+          url,
+          image,
+          date: published
+        })
+      }
+    }
+
     // Sort by date, most recent first
-    return data.sort((a: any, b: any) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   } catch (error) {
-    console.error('Error fetching news:', error)
+    console.error('Error fetching news from RSS:', error)
     return []
   }
 }

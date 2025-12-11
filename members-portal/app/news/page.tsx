@@ -79,9 +79,13 @@ export default async function NewsPage() {
                     <h2 className="font-serif text-lg text-gray-900 mb-2 group-hover:text-gray-600 transition line-clamp-3">
                       {item.title}
                     </h2>
-                    <p className="text-sm text-gray-600 line-clamp-2 flex-1">
-                      {item.subtitle}
-                    </p>
+                    <div className="text-xs text-gray-400 font-mono">
+                      {new Date(item.date).toLocaleDateString('en-US', {
+                        month: 'short',
+                        day: 'numeric',
+                        year: 'numeric'
+                      })}
+                    </div>
                   </div>
                 </article>
               </Link>
