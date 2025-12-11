@@ -1,6 +1,16 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+
+interface CustomizableField {
+  name: string
+  label: string
+  type: 'text' | 'textarea' | 'select' | 'date'
+  required: boolean
+  placeholder?: string
+  options?: string[]
+}
 
 interface Prompt {
   id: number
@@ -9,6 +19,7 @@ interface Prompt {
   description: string
   prompt: string
   tags: string[]
+  customizableFields?: CustomizableField[]
 }
 
 export default function PromptsClient({ prompts }: { prompts: Prompt[] }) {
@@ -88,12 +99,22 @@ export default function PromptsClient({ prompts }: { prompts: Prompt[] }) {
               </pre>
             </div>
 
-            <button
-              onClick={() => copyToClipboard(prompt.prompt, prompt.id)}
-              className="w-full border border-gray-900 text-gray-900 px-4 py-2 text-sm hover:bg-gray-900 hover:text-white transition"
-            >
-              {copiedId === prompt.id ? '✓ Copied to Clipboard' : 'Copy to Clipboard'}
-            </button>
+            <div className="flex gap-2">
+              {prompt.customizableFields && prompt.customizableFields.length > 0 && (
+                <Link
+                  href={`/prompts/${prompt.id}`}
+                  className="flex-1 border border-gray-900 bg-gray-900 text-white px-4 py-2 text-sm hover:bg-gray-800 transition text-center"
+                >
+                  Customize
+                </Link>
+              )}
+              <button
+                onClick={() => copyToClipboard(prompt.prompt, prompt.id)}
+                className={`${prompt.customizableFields && prompt.customizableFields.length > 0 ? 'flex-1' : 'w-full'} border border-gray-900 text-gray-900 px-4 py-2 text-sm hover:bg-gray-900 hover:text-white transition`}
+              >
+                {copiedId === prompt.id ? '✓ Copied to Clipboard' : 'Copy to Clipboard'}
+              </button>
+            </div>
           </div>
         ))}
       </div>

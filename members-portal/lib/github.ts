@@ -75,6 +75,16 @@ export async function getProjectDetails(id: string) {
   }
 }
 
+export async function getPromptDetails(id: string) {
+  try {
+    const prompts = await getPrompts()
+    return prompts.find((p: any) => p.id.toString() === id)
+  } catch (error) {
+    console.error('Error fetching prompt details:', error)
+    return null
+  }
+}
+
 export async function getNews() {
   try {
     const data = await fetchGitHubFile('news.json')
