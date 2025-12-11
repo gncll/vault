@@ -7,9 +7,9 @@ export async function scrapeArticleImage(url: string): Promise<string> {
   try {
     console.log(`[Image Scrape] Attempting to scrape: ${url}`)
 
-    // Fetch the HTML page with timeout
+    // Fetch the HTML page with timeout (reduced for Vercel)
     const controller = new AbortController()
-    const timeoutId = setTimeout(() => controller.abort(), 8000) // 8 second timeout
+    const timeoutId = setTimeout(() => controller.abort(), 3000) // 3 second timeout
 
     const response = await fetch(url, {
       headers: {

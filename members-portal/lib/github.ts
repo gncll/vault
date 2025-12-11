@@ -175,18 +175,46 @@ export async function getNews() {
       }
     }
 
-    console.log(`[RSS] Parsed ${itemsToProcess.length} items`)
+    console.log(`[RSS] Parsed ${itemsToProcess.length} items, starting image scraping...`)
 
-    // Map to final format (no scraping - too slow on Vercel)
-    const newsItems = itemsToProcess.map((item) => ({
+    // Scrape images for first 10 items only (to avoid timeout)
+    const scrapePromises = itemsToProcess.slice(0, 10).map(async (item) => {
+      let finalImage = item.imageFromRSS
+
+      // Only scrape if placeholder
+      if (finalImage.includes('placeholder')) {
+        try {
+          const scrapedImage = await scrapeArticleImage(item.url)
+          if (scrapedImage && !scrapedImage.includes('placeholder')) {
+            finalImage = scrapedImage
+          }
+        } catch (error) {
+          console.error(`[RSS] Failed to scrape ${item.url}`)
+        }
+      }
+
+      return {
+        id: item.url,
+        title: item.title,
+        url: item.url,
+        image: finalImage,
+        date: item.date
+      }
+    })
+
+    // For remaining items, use RSS images
+    const remainingItems = itemsToProcess.slice(10).map((item) => ({
       id: item.url,
       title: item.title,
       url: item.url,
-      image: item.imageFromRSS, // Use RSS image or placeholder
+      image: item.imageFromRSS,
       date: item.date
     }))
 
-    console.log(`[RSS] Returning ${newsItems.length} news items`)
+    const scrapedItems = await Promise.all(scrapePromises)
+    const newsItems = [...scrapedItems, ...remainingItems]
+
+    console.log(`[RSS] Completed, returning ${newsItems.length} items`)
 
     // Sort by date, most recent first
     return newsItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
