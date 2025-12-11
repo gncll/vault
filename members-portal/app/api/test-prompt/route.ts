@@ -2,12 +2,26 @@ import { auth } from '@clerk/nextjs/server'
 import { NextResponse } from 'next/server'
 import Anthropic from '@anthropic-ai/sdk'
 
+const ANTHROPIC_API_KEY = process.env.ANTHROPIC_API_KEY
+
+if (!ANTHROPIC_API_KEY) {
+  console.error('ANTHROPIC_API_KEY is not set')
+}
+
 const anthropic = new Anthropic({
-  apiKey: process.env.ANTHROPIC_API_KEY || '',
+  apiKey: ANTHROPIC_API_KEY || 'dummy-key',
 })
 
 export async function POST(request: Request) {
   try {
+    // Check if API key is configured
+    if (!ANTHROPIC_API_KEY) {
+      return NextResponse.json(
+        { error: 'Anthropic API key is not configured. Please add ANTHROPIC_API_KEY to environment variables.' },
+        { status: 500 }
+      )
+    }
+
     // Check if user is authenticated
     const { userId } = await auth()
 
