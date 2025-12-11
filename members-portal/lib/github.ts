@@ -101,11 +101,16 @@ export async function getNews() {
 
     const xmlText = await response.text()
 
-    // Parse XML using basic string parsing (no external dependencies)
-    const items: any[] = []
+    // Split by entry tags - take only first 20 entries
+    const entries = xmlText.split('<entry>').slice(1, 21) // Only process first 20
 
-    // Split by entry tags
-    const entries = xmlText.split('<entry>').slice(1) // Skip first element (before first entry)
+    // First pass: parse all entries and collect URLs that need scraping
+    const itemsToProcess: Array<{
+      title: string
+      url: string
+      date: string
+      imageFromRSS: string
+    }> = []
 
     for (const entryText of entries) {
       const entry = entryText.split('</entry>')[0]
@@ -113,18 +118,13 @@ export async function getNews() {
       // Extract title
       const titleMatch = entry.match(/<title>([\s\S]*?)<\/title>/)
       let title = titleMatch ? titleMatch[1].trim() : ''
-
-      // Remove CDATA tags if present
       title = title.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim()
 
-      // Extract link - Google Alerts uses redirect URLs, extract the actual URL
+      // Extract link
       const linkMatch = entry.match(/<link[^>]*href="([^"]*)"/)
       let url = linkMatch ? linkMatch[1] : ''
-
-      // Decode HTML entities (&amp; -> &)
       url = url.replace(/&amp;/g, '&')
 
-      // If it's a Google redirect URL, extract the actual URL
       if (url.includes('google.com/url?')) {
         const urlParams = new URL(url).searchParams
         const actualUrl = urlParams.get('url')
@@ -139,41 +139,60 @@ export async function getNews() {
 
       // Extract content/description for image
       const contentMatch = entry.match(/<content[^>]*>([\s\S]*?)<\/content>/)
-      let image = 'https://placehold.co/600x400/f3f4f6/9ca3af/png?text=AI+News' // Default placeholder
+      let imageFromRSS = 'https://placehold.co/600x400/f3f4f6/9ca3af/png?text=AI+News'
 
       if (contentMatch) {
         const content = contentMatch[1]
         const imgMatch = content.match(/<img[^>]*src="([^"]*)"/)
         if (imgMatch) {
-          image = imgMatch[1]
-        }
-      }
-
-      // If no image found in RSS feed, scrape the actual article page
-      if (url && (image.includes('placeholder') || !image)) {
-        try {
-          const scrapedImage = await scrapeArticleImage(url)
-          if (scrapedImage && !scrapedImage.includes('placeholder')) {
-            image = scrapedImage
-          }
-        } catch (error) {
-          console.error(`Failed to scrape image for ${url}:`, error)
+          imageFromRSS = imgMatch[1]
         }
       }
 
       if (url) {
-        items.push({
-          id: url, // Use URL as unique ID
+        itemsToProcess.push({
           title,
           url,
-          image,
-          date: published
+          date: published,
+          imageFromRSS
         })
       }
     }
 
+    console.log(`[RSS] Parsed ${itemsToProcess.length} items, starting image scraping...`)
+
+    // Second pass: scrape images in parallel for items without images
+    const scrapePromises = itemsToProcess.map(async (item) => {
+      let finalImage = item.imageFromRSS
+
+      // Only scrape if no image from RSS or it's a placeholder
+      if (finalImage.includes('placeholder') || !finalImage) {
+        try {
+          const scrapedImage = await scrapeArticleImage(item.url)
+          if (scrapedImage && !scrapedImage.includes('placeholder')) {
+            finalImage = scrapedImage
+          }
+        } catch (error) {
+          console.error(`Failed to scrape image for ${item.url}:`, error)
+        }
+      }
+
+      return {
+        id: item.url,
+        title: item.title,
+        url: item.url,
+        image: finalImage,
+        date: item.date
+      }
+    })
+
+    // Wait for all scraping to complete
+    const scrapedItems = await Promise.all(scrapePromises)
+
+    console.log(`[RSS] Completed scraping ${scrapedItems.length} items`)
+
     // Sort by date, most recent first
-    return items.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    return scrapedItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   } catch (error) {
     console.error('Error fetching news from RSS:', error)
     return []
