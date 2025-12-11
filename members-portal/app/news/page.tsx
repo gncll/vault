@@ -29,7 +29,14 @@ export default function NewsPage() {
 
         const data = await response.json()
         console.log('[News Page] Received data:', data.length, 'items')
-        console.log('[News Page] First item:', data[0])
+        console.log('[News Page] First item:', JSON.stringify(data[0], null, 2))
+
+        // Debug: Check if title and image exist
+        if (data.length > 0) {
+          console.log('[News Page] First item title:', data[0].title)
+          console.log('[News Page] First item image:', data[0].image)
+        }
+
         setNews(data)
       } catch (error) {
         console.error('[News Page] Error fetching news:', error)
