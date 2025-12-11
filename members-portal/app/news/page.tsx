@@ -111,34 +111,16 @@ export default function NewsPage() {
                   rel="noopener noreferrer"
                   className="group"
                 >
-                <article className="border border-gray-200 hover:bg-gray-50 transition-colors overflow-hidden h-full flex flex-col">
-                  {/* Image */}
-                  <div className="aspect-video relative bg-gray-100">
-                    <Image
-                      src={item.image}
-                      alt={item.title}
-                      fill
-                      className="object-cover"
-                      unoptimized={item.image.includes('placeholder')}
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement
-                        target.src = 'https://placehold.co/600x400/f3f4f6/9ca3af/png?text=AI+News'
-                      }}
-                    />
-                  </div>
-
-                  {/* Content */}
-                  <div className="p-6 flex-1 flex flex-col">
-                    <h2 className="font-serif text-lg text-gray-900 mb-2 group-hover:text-gray-600 transition line-clamp-3">
-                      {item.title}
-                    </h2>
-                    <div className="text-xs text-gray-400 font-mono">
-                      {new Date(item.date).toLocaleDateString('en-US', {
-                        month: 'short',
-                        day: 'numeric',
-                        year: 'numeric'
-                      })}
-                    </div>
+                <article className="border border-gray-200 hover:bg-gray-50 transition-colors p-6 h-full flex flex-col">
+                  <h2 className="font-serif text-lg text-gray-900 mb-2 group-hover:text-gray-600 transition line-clamp-4 flex-1">
+                    {item.title}
+                  </h2>
+                  <div className="text-xs text-gray-400 font-mono mt-2">
+                    {new Date(item.date).toLocaleDateString('en-US', {
+                      month: 'short',
+                      day: 'numeric',
+                      year: 'numeric'
+                    })}
                   </div>
                 </article>
                 </Link>
