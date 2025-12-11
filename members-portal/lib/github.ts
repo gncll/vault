@@ -119,6 +119,9 @@ export async function getNews() {
       const linkMatch = entry.match(/<link[^>]*href="([^"]*)"/)
       let url = linkMatch ? linkMatch[1] : ''
 
+      // Decode HTML entities (&amp; -> &)
+      url = url.replace(/&amp;/g, '&')
+
       // If it's a Google redirect URL, extract the actual URL
       if (url.includes('google.com/url?')) {
         const urlParams = new URL(url).searchParams
@@ -134,7 +137,7 @@ export async function getNews() {
 
       // Extract content/description for image
       const contentMatch = entry.match(/<content[^>]*>([\s\S]*?)<\/content>/)
-      let image = 'https://via.placeholder.com/600x400/f3f4f6/9ca3af?text=AI+News' // Default placeholder
+      let image = 'https://placehold.co/600x400/f3f4f6/9ca3af/png?text=AI+News' // Default placeholder
 
       if (contentMatch) {
         const content = contentMatch[1]

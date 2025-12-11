@@ -70,23 +70,31 @@ export default function NewsPage() {
                 src="https://www.learnwithmeai.com/embed"
                 width="480"
                 height="320"
-                style={{ border: '1px solid #EEE', background: 'white' }}
-                scrolling="no"
+                style={{ border: '1px solid #EEE', background: 'white', overflow: 'hidden' }}
                 title="Subscribe to LearnAIWithMe"
               />
             </div>
           </div>
 
+          {/* Loading State */}
+          {loading && (
+            <div className="py-20 text-center">
+              <div className="inline-block animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 mb-4"></div>
+              <p className="text-sm text-gray-600">Loading AI news...</p>
+            </div>
+          )}
+
           {/* 4-Column Grid */}
-          <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {news.map((item: any) => (
-              <Link
-                key={item.id}
-                href={item.url}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group"
-              >
+          {!loading && (
+            <div className="py-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {news.map((item: any) => (
+                <Link
+                  key={item.id}
+                  href={item.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group"
+                >
                 <article className="border border-gray-200 hover:bg-gray-50 transition-colors overflow-hidden h-full flex flex-col">
                   {/* Image */}
                   <div className="aspect-video relative bg-gray-100">
@@ -98,7 +106,7 @@ export default function NewsPage() {
                       unoptimized={item.image.includes('placeholder')}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement
-                        target.src = 'https://via.placeholder.com/600x400/f3f4f6/9ca3af?text=AI+News'
+                        target.src = 'https://placehold.co/600x400/f3f4f6/9ca3af/png?text=AI+News'
                       }}
                     />
                   </div>
@@ -117,12 +125,13 @@ export default function NewsPage() {
                     </div>
                   </div>
                 </article>
-              </Link>
-            ))}
-          </div>
+                </Link>
+              ))}
+            </div>
+          )}
 
           {/* Empty State */}
-          {news.length === 0 && (
+          {!loading && news.length === 0 && (
             <div className="py-20 text-center">
               <div className="text-3xl mb-4">📰</div>
               <h2 className="font-serif text-2xl text-gray-900 mb-2">No News Yet</h2>
