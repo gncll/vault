@@ -122,10 +122,7 @@ export async function getNews() {
       // Remove CDATA wrapper if present
       title = title.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1')
 
-      // Strip HTML tags (like <b>, <i>, etc.)
-      title = title.replace(/<[^>]+>/g, '')
-
-      // Decode HTML entities
+      // Decode HTML entities FIRST (so &lt;b&gt; becomes <b>)
       title = title
         .replace(/&amp;/g, '&')
         .replace(/&lt;/g, '<')
@@ -135,7 +132,9 @@ export async function getNews() {
         .replace(/&apos;/g, "'")
         .replace(/&#x27;/g, "'")
         .replace(/&nbsp;/g, ' ')
-        .trim()
+
+      // THEN strip HTML tags (now they're real < and > characters)
+      title = title.replace(/<[^>]+>/g, '').trim()
 
       // Extract link
       const linkMatch = entry.match(/<link[^>]*href="([^"]*)"/)
@@ -176,40 +175,21 @@ export async function getNews() {
       }
     }
 
-    console.log(`[RSS] Parsed ${itemsToProcess.length} items, starting image scraping...`)
+    console.log(`[RSS] Parsed ${itemsToProcess.length} items`)
 
-    // Second pass: scrape images in parallel for items without images
-    const scrapePromises = itemsToProcess.map(async (item) => {
-      let finalImage = item.imageFromRSS
+    // Map to final format (no scraping - too slow on Vercel)
+    const newsItems = itemsToProcess.map((item) => ({
+      id: item.url,
+      title: item.title,
+      url: item.url,
+      image: item.imageFromRSS, // Use RSS image or placeholder
+      date: item.date
+    }))
 
-      // Only scrape if no image from RSS or it's a placeholder
-      if (finalImage.includes('placeholder') || !finalImage) {
-        try {
-          const scrapedImage = await scrapeArticleImage(item.url)
-          if (scrapedImage && !scrapedImage.includes('placeholder')) {
-            finalImage = scrapedImage
-          }
-        } catch (error) {
-          console.error(`Failed to scrape image for ${item.url}:`, error)
-        }
-      }
-
-      return {
-        id: item.url,
-        title: item.title,
-        url: item.url,
-        image: finalImage,
-        date: item.date
-      }
-    })
-
-    // Wait for all scraping to complete
-    const scrapedItems = await Promise.all(scrapePromises)
-
-    console.log(`[RSS] Completed scraping ${scrapedItems.length} items`)
+    console.log(`[RSS] Returning ${newsItems.length} news items`)
 
     // Sort by date, most recent first
-    return scrapedItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    return newsItems.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
   } catch (error) {
     console.error('Error fetching news from RSS:', error)
     return []
