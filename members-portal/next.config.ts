@@ -51,6 +51,26 @@ const nextConfig: NextConfig = {
         protocol: 'https',
         hostname: '**.imgur.com',
       },
+      {
+        protocol: 'https',
+        hostname: '**.yimg.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.yahoo.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.cbsnews.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.theguardian.com',
+      },
+      {
+        protocol: 'https',
+        hostname: '**.nbcnews.com',
+      },
     ],
   },
 };

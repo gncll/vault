@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import { getNews } from '@/lib/github'
 
 export const dynamic = 'force-dynamic' // Force dynamic rendering
-export const revalidate = 300 // Cache for 5 minutes
+export const revalidate = 0 // No caching
 
 export async function GET() {
   try {
