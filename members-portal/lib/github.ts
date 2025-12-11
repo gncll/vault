@@ -115,9 +115,18 @@ export async function getNews() {
       // Remove CDATA tags if present
       title = title.replace(/<!\[CDATA\[([\s\S]*?)\]\]>/g, '$1').trim()
 
-      // Extract link
+      // Extract link - Google Alerts uses redirect URLs, extract the actual URL
       const linkMatch = entry.match(/<link[^>]*href="([^"]*)"/)
-      const url = linkMatch ? linkMatch[1] : ''
+      let url = linkMatch ? linkMatch[1] : ''
+
+      // If it's a Google redirect URL, extract the actual URL
+      if (url.includes('google.com/url?')) {
+        const urlParams = new URL(url).searchParams
+        const actualUrl = urlParams.get('url')
+        if (actualUrl) {
+          url = actualUrl
+        }
+      }
 
       // Extract published date
       const publishedMatch = entry.match(/<published>(.*?)<\/published>/)

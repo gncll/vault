@@ -71,6 +71,11 @@ export default async function NewsPage() {
                       alt={item.title}
                       fill
                       className="object-cover"
+                      unoptimized={item.image.includes('placeholder')}
+                      onError={(e) => {
+                        const target = e.target as HTMLImageElement
+                        target.src = 'https://via.placeholder.com/600x400/f3f4f6/9ca3af?text=AI+News'
+                      }}
                     />
                   </div>
 
