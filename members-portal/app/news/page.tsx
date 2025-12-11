@@ -1,11 +1,35 @@
-import { getNews } from '@/lib/github'
+'use client'
+
+import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 
-export const revalidate = 300 // Cache for 5 minutes
+interface NewsItem {
+  id: string
+  title: string
+  url: string
+  image: string
+  date: string
+}
 
-export default async function NewsPage() {
-  const news = await getNews()
+export default function NewsPage() {
+  const [news, setNews] = useState<NewsItem[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function fetchNews() {
+      try {
+        const response = await fetch('/api/news')
+        const data = await response.json()
+        setNews(data)
+      } catch (error) {
+        console.error('Error fetching news:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchNews()
+  }, [])
 
   return (
     <div className="min-h-screen bg-white">
