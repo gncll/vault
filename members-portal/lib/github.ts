@@ -1,6 +1,8 @@
 // GitHub content fetching utilities
 // No token needed for public repos, but add GITHUB_TOKEN to .env.local for private repos
 
+import { scrapeArticleImage } from './scrapeImage'
+
 interface GitHubContentResponse {
   content: string;
   encoding: string;
@@ -144,6 +146,18 @@ export async function getNews() {
         const imgMatch = content.match(/<img[^>]*src="([^"]*)"/)
         if (imgMatch) {
           image = imgMatch[1]
+        }
+      }
+
+      // If no image found in RSS feed, scrape the actual article page
+      if (url && (image.includes('placeholder') || !image)) {
+        try {
+          const scrapedImage = await scrapeArticleImage(url)
+          if (scrapedImage && !scrapedImage.includes('placeholder')) {
+            image = scrapedImage
+          }
+        } catch (error) {
+          console.error(`Failed to scrape image for ${url}:`, error)
         }
       }
 
