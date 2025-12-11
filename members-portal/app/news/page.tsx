@@ -19,11 +19,20 @@ export default function NewsPage() {
   useEffect(() => {
     async function fetchNews() {
       try {
+        console.log('[News Page] Fetching from /api/news...')
         const response = await fetch('/api/news')
+        console.log('[News Page] Response status:', response.status)
+
+        if (!response.ok) {
+          throw new Error(`API returned ${response.status}`)
+        }
+
         const data = await response.json()
+        console.log('[News Page] Received data:', data.length, 'items')
+        console.log('[News Page] First item:', data[0])
         setNews(data)
       } catch (error) {
-        console.error('Error fetching news:', error)
+        console.error('[News Page] Error fetching news:', error)
       } finally {
         setLoading(false)
       }
