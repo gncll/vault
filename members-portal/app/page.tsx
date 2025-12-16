@@ -68,12 +68,12 @@ export default function Home() {
         </div>
 
         {/* Collections - Minimal Cards */}
-        <div className="py-20 grid md:grid-cols-4 gap-1 border-b border-gray-200">
-          <Link href="/customgpts" className="group">
-            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors">
+        <div className="py-20 grid md:grid-cols-4 gap-1 border-b border-gray-200 items-stretch">
+          <Link href="/customgpts" className="group h-full">
+            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4">🤖</div>
               <h3 className="font-serif text-xl mb-2 text-gray-900">Custom GPTs</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed flex-1">
                 Specialized AI assistants designed for specific engineering tasks
               </p>
               <div className="mt-4 text-xs text-gray-400 group-hover:text-gray-600 transition">
@@ -82,8 +82,8 @@ export default function Home() {
             </div>
           </Link>
 
-          <Link href="/projects" className="group">
-            <div className="border-t border-b border-r md:border-l border-gray-200 p-8 hover:bg-gray-50 transition-colors">
+          <Link href="/projects" className="group h-full">
+            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="mb-4">
                 <Image
                   src="/project-icon.png"
@@ -94,7 +94,7 @@ export default function Home() {
                 />
               </div>
               <h3 className="font-serif text-xl mb-2 text-gray-900">Project Archives</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed flex-1">
                 Detailed documentation and guides for hands-on engineering projects
               </p>
               <div className="mt-4 text-xs text-gray-400 group-hover:text-gray-600 transition">
@@ -103,11 +103,11 @@ export default function Home() {
             </div>
           </Link>
 
-          <Link href="/prompts" className="group">
-            <div className="border-t border-b border-r md:border-l border-gray-200 p-8 hover:bg-gray-50 transition-colors">
+          <Link href="/prompts" className="group h-full">
+            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4">✍️</div>
               <h3 className="font-serif text-xl mb-2 text-gray-900">Prompt Library</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed flex-1">
                 Curated collection of high-quality prompts for various use cases
               </p>
               <div className="mt-4 text-xs text-gray-400 group-hover:text-gray-600 transition">
@@ -116,11 +116,11 @@ export default function Home() {
             </div>
           </Link>
 
-          <Link href="/nano-banana" className="group">
-            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors">
+          <Link href="/nano-banana" className="group h-full">
+            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4">🍌</div>
               <h3 className="font-serif text-xl mb-2 text-gray-900">Nano Banana</h3>
-              <p className="text-sm text-gray-600 leading-relaxed">
+              <p className="text-sm text-gray-600 leading-relaxed flex-1">
                 AI image generation studio with prompt testing and infographics
               </p>
               <div className="mt-4 text-xs text-gray-400 group-hover:text-gray-600 transition">
