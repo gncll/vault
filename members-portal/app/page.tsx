@@ -68,7 +68,7 @@ export default function Home() {
         </div>
 
         {/* Collections - Minimal Cards */}
-        <div className="py-20 grid md:grid-cols-3 gap-1 border-b border-gray-200">
+        <div className="py-20 grid md:grid-cols-4 gap-1 border-b border-gray-200">
           <Link href="/customgpts" className="group">
             <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors">
               <div className="text-3xl mb-4">🤖</div>
@@ -104,7 +104,7 @@ export default function Home() {
           </Link>
 
           <Link href="/prompts" className="group">
-            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors">
+            <div className="border-t border-b border-r md:border-l border-gray-200 p-8 hover:bg-gray-50 transition-colors">
               <div className="text-3xl mb-4">✍️</div>
               <h3 className="font-serif text-xl mb-2 text-gray-900">Prompt Library</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
@@ -112,6 +112,19 @@ export default function Home() {
               </p>
               <div className="mt-4 text-xs text-gray-400 group-hover:text-gray-600 transition">
                 View Collection →
+              </div>
+            </div>
+          </Link>
+
+          <Link href="/nano-banana" className="group">
+            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors">
+              <div className="text-3xl mb-4">🍌</div>
+              <h3 className="font-serif text-xl mb-2 text-gray-900">Nano Banana</h3>
+              <p className="text-sm text-gray-600 leading-relaxed">
+                AI image generation studio with prompt testing and infographics
+              </p>
+              <div className="mt-4 text-xs text-gray-400 group-hover:text-gray-600 transition">
+                Create Images →
               </div>
             </div>
           </Link>

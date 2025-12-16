@@ -67,6 +67,15 @@ export async function getPrompts() {
   }
 }
 
+export async function getNanoBananaPrompts() {
+  try {
+    return await fetchGitHubFile('nano-banana-prompts.json')
+  } catch (error) {
+    console.error('Error fetching nano banana prompts:', error)
+    return []
+  }
+}
+
 export async function getProjectDetails(id: string) {
   try {
     const projects = await getProjects()
