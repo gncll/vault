@@ -2,11 +2,12 @@
 
 import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
 import Header from '@/app/components/Header'
+import ChatPanel from './ChatPanel'
 
 // Configure PDF.js worker
 pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`
@@ -30,6 +31,40 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [scale, setScale] = useState<number>(1.0)
   const [viewMode, setViewMode] = useState<ViewMode>('slides')
+  const [chatOpen, setChatOpen] = useState(false)
+  const [pdfText, setPdfText] = useState<string>('')
+
+  // Extract text from PDF for AI context
+  useEffect(() => {
+    if (project?.solutionPdf) {
+      extractPdfText(project.solutionPdf)
+    }
+  }, [project?.solutionPdf])
+
+  const extractPdfText = async (pdfUrl: string) => {
+    try {
+      const loadingTask = pdfjs.getDocument(pdfUrl)
+      const pdf = await loadingTask.promise
+      let fullText = ''
+
+      // Extract text from first 10 pages (to limit context size)
+      const maxPages = Math.min(pdf.numPages, 10)
+      for (let i = 1; i <= maxPages; i++) {
+        const page = await pdf.getPage(i)
+        const textContent = await page.getTextContent()
+        const pageText = textContent.items
+          .map((item: any) => item.str)
+          .join(' ')
+        fullText += pageText + '\n\n'
+      }
+
+      // Limit to ~15000 chars to stay within token limits
+      setPdfText(fullText.substring(0, 15000))
+      console.log('[PDF] Extracted text length:', fullText.length)
+    } catch (error) {
+      console.error('[PDF] Text extraction failed:', error)
+    }
+  }
 
   if (!project) {
     return (
@@ -123,6 +158,17 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
                 Data Files
               </button>
             )}
+
+            {/* Chat Button - in tab bar */}
+            <button
+              onClick={() => setChatOpen(true)}
+              className="px-4 py-2 text-sm bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition flex items-center gap-2"
+            >
+              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+              </svg>
+              Ask AI
+            </button>
           </div>
 
           {/* PDF Controls - Only show for Slides and Solution */}
@@ -262,6 +308,25 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
           </div>
         )}
       </main>
+
+      {/* Chat Button - Fixed bottom right */}
+      <button
+        onClick={() => setChatOpen(true)}
+        className="fixed bottom-6 right-6 w-14 h-14 bg-gray-900 hover:bg-gray-800 text-white rounded-full shadow-lg flex items-center justify-center transition z-40"
+        title="Ask AI about this project"
+      >
+        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z" />
+        </svg>
+      </button>
+
+      {/* Chat Panel */}
+      <ChatPanel
+        isOpen={chatOpen}
+        onClose={() => setChatOpen(false)}
+        projectTitle={project.title}
+        pdfContent={pdfText}
+      />
     </div>
   )
 }
