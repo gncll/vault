@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
     console.log(`[Nano Banana] Aspect Ratio: ${aspectRatio}`)
     console.log(`[Nano Banana] Model: ${model}`)
 
-    // Use Gemini 3 Pro Image - best quality model
+    // Use Gemini 3 Pro Image - best quality model for image generation
     const modelsToTry = ['gemini-3-pro-image-preview']
 
     for (const modelId of modelsToTry) {

@@ -47,12 +47,12 @@ export default async function Dashboard() {
         </div>
 
         {/* Collections Grid */}
-        <div className="py-12 grid md:grid-cols-2 lg:grid-cols-4 gap-1">
-          <Link href="/customgpts" className="group">
-            <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors">
+        <div className="py-12 grid md:grid-cols-2 lg:grid-cols-4 gap-1 items-stretch">
+          <Link href="/customgpts" className="group h-full">
+            <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4">🤖</div>
               <h2 className="font-serif text-2xl mb-3 text-gray-900">Custom GPTs</h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6">
+              <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">
                 Specialized AI assistants designed for specific engineering tasks
               </p>
               <div className="text-xs text-gray-400 group-hover:text-gray-600 transition">
@@ -61,8 +61,8 @@ export default async function Dashboard() {
             </div>
           </Link>
 
-          <Link href="/projects" className="group">
-            <div className="border-t border-b border-r md:border-l border-gray-200 p-10 hover:bg-gray-50 transition-colors">
+          <Link href="/projects" className="group h-full">
+            <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="mb-4">
                 <Image
                   src="/project-icon.png"
@@ -73,7 +73,7 @@ export default async function Dashboard() {
                 />
               </div>
               <h2 className="font-serif text-2xl mb-3 text-gray-900">Project Archives</h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6">
+              <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">
                 Detailed documentation and guides for hands-on projects
               </p>
               <div className="text-xs text-gray-400 group-hover:text-gray-600 transition">
@@ -82,11 +82,11 @@ export default async function Dashboard() {
             </div>
           </Link>
 
-          <Link href="/prompts" className="group">
-            <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors">
+          <Link href="/prompts" className="group h-full">
+            <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4">✍️</div>
               <h2 className="font-serif text-2xl mb-3 text-gray-900">Prompt Library</h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6">
+              <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">
                 Curated collection of high-quality prompts
               </p>
               <div className="text-xs text-gray-400 group-hover:text-gray-600 transition">
@@ -95,15 +95,15 @@ export default async function Dashboard() {
             </div>
           </Link>
 
-          <Link href="/news" className="group">
-            <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors">
-              <div className="text-3xl mb-4">📰</div>
-              <h2 className="font-serif text-2xl mb-3 text-gray-900">AI News</h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6">
-                Latest updates and insights from the AI world
+          <Link href="/nano-banana" className="group h-full">
+            <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors h-full flex flex-col">
+              <div className="text-3xl mb-4">🍌</div>
+              <h2 className="font-serif text-2xl mb-3 text-gray-900">Nano Banana</h2>
+              <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">
+                AI image generation with prompt library
               </p>
               <div className="text-xs text-gray-400 group-hover:text-gray-600 transition">
-                View Collection →
+                Create Images →
               </div>
             </div>
           </Link>
