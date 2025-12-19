@@ -50,7 +50,7 @@ export default async function Dashboard() {
         <div className="py-12 grid md:grid-cols-2 lg:grid-cols-4 gap-1 items-stretch">
           <Link href="/customgpts" className="group h-full">
             <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors h-full flex flex-col">
-              <div className="text-3xl mb-4">🤖</div>
+              <div className="text-3xl mb-4 grayscale">🤖</div>
               <h2 className="font-serif text-2xl mb-3 text-gray-900">Custom GPTs</h2>
               <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">
                 Specialized AI assistants designed for specific engineering tasks

@@ -71,7 +71,7 @@ export default function Home() {
         <div className="py-20 grid md:grid-cols-4 gap-1 border-b border-gray-200 items-stretch">
           <Link href="/customgpts" className="group h-full">
             <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
-              <div className="text-3xl mb-4">🤖</div>
+              <div className="text-3xl mb-4 grayscale">🤖</div>
               <h3 className="font-serif text-xl mb-2 text-gray-900">Custom GPTs</h3>
               <p className="text-sm text-gray-600 leading-relaxed flex-1">
                 Specialized AI assistants designed for specific engineering tasks
@@ -105,7 +105,7 @@ export default function Home() {
 
           <Link href="/prompts" className="group h-full">
             <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
-              <div className="text-3xl mb-4">✍️</div>
+              <div className="text-3xl mb-4 grayscale">✍️</div>
               <h3 className="font-serif text-xl mb-2 text-gray-900">Prompt Library</h3>
               <p className="text-sm text-gray-600 leading-relaxed flex-1">
                 Curated collection of high-quality prompts for various use cases

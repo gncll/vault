@@ -24,6 +24,25 @@ export default async function PromptsPage() {
             <p className="text-sm text-gray-600">
               Curated collection of high-quality prompts
             </p>
+
+            {/* Prompt Optimizer Banner */}
+            <Link
+              href="/prompts/prompt-optimizer"
+              className="mt-6 block border border-gray-200 rounded-lg p-5 hover:bg-gray-50 hover:border-gray-300 transition group"
+            >
+              <div className="flex items-center justify-between">
+                <div className="flex items-center gap-4">
+                  <div className="text-2xl">✨</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-900 group-hover:text-gray-700">Prompt Optimizer</h3>
+                    <p className="text-sm text-gray-500">Transform your prompts with AI-powered optimization techniques</p>
+                  </div>
+                </div>
+                <svg className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
+              </div>
+            </Link>
           </div>
 
           <PromptsClient prompts={prompts} />
