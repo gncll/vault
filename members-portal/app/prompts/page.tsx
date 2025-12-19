@@ -3,10 +3,11 @@ import Link from 'next/link'
 import Header from '@/app/components/Header'
 import SubscriptionCheck from '@/app/components/SubscriptionCheck'
 import { getPrompts } from '@/lib/github'
-import PromptsClient from './PromptsClient'
+import PromptLibraryClient from './PromptLibraryClient'
+import imagePrompts from '@/data/nano-banana-prompts.json'
 
 export default async function PromptsPage() {
-  const prompts = await getPrompts()
+  const chatgptPrompts = await getPrompts()
 
   return (
     <SubscriptionCheck>
@@ -20,32 +21,13 @@ export default async function PromptsPage() {
             <Link href="/dashboard" className="text-xs text-gray-500 hover:text-gray-900 transition mb-4 inline-block">
               ← Back to Dashboard
             </Link>
-            <h1 className="font-serif text-4xl text-gray-900 mb-3">Prompt Library</h1>
+            <h1 className="font-serif text-4xl text-gray-900 mb-3">Prompt Hub</h1>
             <p className="text-sm text-gray-600">
-              Curated collection of high-quality prompts
+              Curated collection of high-quality prompts for ChatGPT and AI image generation
             </p>
-
-            {/* Prompt Optimizer Banner */}
-            <Link
-              href="/prompts/prompt-optimizer"
-              className="mt-6 block border border-gray-200 rounded-lg p-5 hover:bg-gray-50 hover:border-gray-300 transition group"
-            >
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-4">
-                  <div className="text-2xl">✨</div>
-                  <div>
-                    <h3 className="font-semibold text-gray-900 group-hover:text-gray-700">Prompt Optimizer</h3>
-                    <p className="text-sm text-gray-500">Transform your prompts with AI-powered optimization techniques</p>
-                  </div>
-                </div>
-                <svg className="w-5 h-5 text-gray-400 group-hover:text-gray-600 transition" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                </svg>
-              </div>
-            </Link>
           </div>
 
-          <PromptsClient prompts={prompts} />
+          <PromptLibraryClient chatgptPrompts={chatgptPrompts} imagePrompts={imagePrompts} />
         </main>
       </div>
     </SubscriptionCheck>

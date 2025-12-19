@@ -68,7 +68,7 @@ export default function Home() {
         </div>
 
         {/* Collections - Minimal Cards */}
-        <div className="py-20 grid md:grid-cols-4 gap-1 border-b border-gray-200 items-stretch">
+        <div className="py-20 grid md:grid-cols-3 gap-1 border-b border-gray-200 items-stretch">
           <Link href="/customgpts" className="group h-full">
             <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4 grayscale">🤖</div>
@@ -106,25 +106,12 @@ export default function Home() {
           <Link href="/prompts" className="group h-full">
             <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4 grayscale">✍️</div>
-              <h3 className="font-serif text-xl mb-2 text-gray-900">Prompt Library</h3>
+              <h3 className="font-serif text-xl mb-2 text-gray-900">Prompt Hub</h3>
               <p className="text-sm text-gray-600 leading-relaxed flex-1">
-                Curated collection of high-quality prompts for various use cases
+                ChatGPT prompts, image generation prompts, and AI tools
               </p>
               <div className="mt-4 text-xs text-gray-400 group-hover:text-gray-600 transition">
                 View Collection →
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/nano-banana" className="group h-full">
-            <div className="border border-gray-200 p-8 hover:bg-gray-50 transition-colors h-full flex flex-col">
-              <div className="text-3xl mb-4">🍌</div>
-              <h3 className="font-serif text-xl mb-2 text-gray-900">Nano Banana</h3>
-              <p className="text-sm text-gray-600 leading-relaxed flex-1">
-                AI image generation studio with prompt testing and infographics
-              </p>
-              <div className="mt-4 text-xs text-gray-400 group-hover:text-gray-600 transition">
-                Create Images →
               </div>
             </div>
           </Link>

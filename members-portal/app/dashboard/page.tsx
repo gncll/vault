@@ -47,7 +47,7 @@ export default async function Dashboard() {
         </div>
 
         {/* Collections Grid */}
-        <div className="py-12 grid md:grid-cols-2 lg:grid-cols-4 gap-1 items-stretch">
+        <div className="py-12 grid md:grid-cols-3 gap-1 items-stretch">
           <Link href="/customgpts" className="group h-full">
             <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4 grayscale">🤖</div>
@@ -85,25 +85,12 @@ export default async function Dashboard() {
           <Link href="/prompts" className="group h-full">
             <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors h-full flex flex-col">
               <div className="text-3xl mb-4">✍️</div>
-              <h2 className="font-serif text-2xl mb-3 text-gray-900">Prompt Library</h2>
+              <h2 className="font-serif text-2xl mb-3 text-gray-900">Prompt Hub</h2>
               <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">
-                Curated collection of high-quality prompts
+                ChatGPT prompts, image generation prompts, and AI tools
               </p>
               <div className="text-xs text-gray-400 group-hover:text-gray-600 transition">
                 View Collection →
-              </div>
-            </div>
-          </Link>
-
-          <Link href="/nano-banana" className="group h-full">
-            <div className="border border-gray-200 p-10 hover:bg-gray-50 transition-colors h-full flex flex-col">
-              <div className="text-3xl mb-4">🍌</div>
-              <h2 className="font-serif text-2xl mb-3 text-gray-900">Nano Banana</h2>
-              <p className="text-sm text-gray-600 leading-relaxed mb-6 flex-1">
-                AI image generation with prompt library
-              </p>
-              <div className="text-xs text-gray-400 group-hover:text-gray-600 transition">
-                Create Images →
               </div>
             </div>
           </Link>
