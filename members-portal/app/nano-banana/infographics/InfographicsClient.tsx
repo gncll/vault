@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useRef } from 'react'
+import { useState, useRef, useEffect } from 'react'
 
 const INFOGRAPHIC_TYPES = [
   { value: 'comparison', label: 'Comparison', description: 'Compare two or more items side by side' },
@@ -61,6 +61,31 @@ const ASPECT_RATIOS = [
   { value: '3:4', label: '3:4 (Portrait)' },
 ]
 
+const IMAGE_MODELS = [
+  {
+    value: 'chatgpt',
+    label: 'ChatGPT Image',
+    description: 'OpenAI GPT-Image-1 - Best quality, realistic results',
+    badge: 'Recommended'
+  },
+  {
+    value: 'nano-banana',
+    label: 'Nano Banana Pro',
+    description: 'Gemini 3 Pro - Fast generation, creative styles',
+    badge: null
+  },
+]
+
+// Map aspect ratios to OpenAI sizes
+const OPENAI_SIZE_MAP: Record<string, '1024x1024' | '1536x1024' | '1024x1536'> = {
+  '1:1': '1024x1024',
+  '4:5': '1024x1536',
+  '9:16': '1024x1536',
+  '16:9': '1536x1024',
+  '2:3': '1024x1536',
+  '3:4': '1024x1536',
+}
+
 export default function InfographicsClient() {
   const [topic, setTopic] = useState('')
   const [infographicType, setInfographicType] = useState('comparison')
@@ -71,6 +96,7 @@ export default function InfographicsClient() {
   const [inspirationStyle, setInspirationStyle] = useState('')
   const [aspectRatio, setAspectRatio] = useState('1:1')
   const [additionalNotes, setAdditionalNotes] = useState('')
+  const [imageModel, setImageModel] = useState('chatgpt')
 
   const colorPickerRef = useRef<HTMLInputElement>(null)
 
@@ -81,6 +107,26 @@ export default function InfographicsClient() {
   const [isGeneratingImage, setIsGeneratingImage] = useState(false)
 
   const [error, setError] = useState<string | null>(null)
+
+  // Daily usage tracking for ChatGPT
+  const [dailyUsage, setDailyUsage] = useState<{ used: number; remaining: number; limit: number } | null>(null)
+
+  // Fetch usage on mount
+  useEffect(() => {
+    fetchUsage()
+  }, [])
+
+  const fetchUsage = async () => {
+    try {
+      const response = await fetch('/api/openai-image')
+      if (response.ok) {
+        const data = await response.json()
+        setDailyUsage(data)
+      }
+    } catch (err) {
+      console.error('Failed to fetch usage:', err)
+    }
+  }
 
   const generatePrompt = async () => {
     if (!topic.trim()) return
@@ -141,24 +187,57 @@ ${additionalNotes ? `Additional notes: ${additionalNotes}` : ''}`
     setGeneratedImage(null)
 
     try {
-      const response = await fetch('/api/nano-banana', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          prompt: prompt.trim(),
-          aspectRatio,
-          model: 'pro'
+      let response: Response
+      let data: any
+
+      if (imageModel === 'chatgpt') {
+        // Use OpenAI GPT-Image-1
+        const openaiSize = OPENAI_SIZE_MAP[aspectRatio] || '1024x1024'
+        response = await fetch('/api/openai-image', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: prompt.trim(),
+            size: openaiSize,
+            quality: 'high'
+          })
         })
-      })
 
-      const data = await response.json()
+        data = await response.json()
 
-      if (!response.ok) {
-        throw new Error(data.error || 'Failed to generate image')
-      }
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to generate image')
+        }
 
-      if (data.image) {
-        setGeneratedImage(`data:${data.image.mimeType};base64,${data.image.data}`)
+        if (data.image) {
+          setGeneratedImage(`data:${data.image.mimeType};base64,${data.image.data}`)
+        }
+
+        // Update usage after successful generation
+        if (data.remaining !== undefined) {
+          setDailyUsage(prev => prev ? { ...prev, remaining: data.remaining, used: prev.limit - data.remaining } : null)
+        }
+      } else {
+        // Use Nano Banana Pro (Gemini)
+        response = await fetch('/api/nano-banana', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            prompt: prompt.trim(),
+            aspectRatio,
+            model: 'pro'
+          })
+        })
+
+        data = await response.json()
+
+        if (!response.ok) {
+          throw new Error(data.error || 'Failed to generate image')
+        }
+
+        if (data.image) {
+          setGeneratedImage(`data:${data.image.mimeType};base64,${data.image.data}`)
+        }
       }
     } catch (err: any) {
       setError(err.message)
@@ -171,7 +250,7 @@ ${additionalNotes ? `Additional notes: ${additionalNotes}` : ''}`
     await generatePrompt()
   }
 
-  const handleTestWithNanoBanana = () => {
+  const handleGenerateImage = () => {
     if (generatedPrompt) {
       generateImage(generatedPrompt)
     }
@@ -381,6 +460,55 @@ ${additionalNotes ? `Additional notes: ${additionalNotes}` : ''}`
             </select>
           </div>
 
+          {/* Image Model Selection */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900 mb-2">
+              Image Generation Model
+            </label>
+            <div className="grid md:grid-cols-2 gap-3">
+              {IMAGE_MODELS.map((model) => (
+                <button
+                  key={model.value}
+                  onClick={() => setImageModel(model.value)}
+                  className={`p-4 border text-left transition relative ${
+                    imageModel === model.value
+                      ? 'border-gray-900 bg-gray-50'
+                      : 'border-gray-200 hover:border-gray-400'
+                  }`}
+                >
+                  {model.badge && (
+                    <span className="absolute top-2 right-2 text-xs bg-green-100 text-green-700 px-2 py-0.5 rounded-full">
+                      {model.badge}
+                    </span>
+                  )}
+                  <div className="font-medium text-sm text-gray-900">{model.label}</div>
+                  <div className="text-xs text-gray-500 mt-1">{model.description}</div>
+                </button>
+              ))}
+            </div>
+
+            {/* Daily Usage Info for ChatGPT */}
+            {imageModel === 'chatgpt' && dailyUsage && (
+              <div className="mt-3 p-3 bg-blue-50 border border-blue-100 rounded">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm text-blue-800">
+                    Daily limit: {dailyUsage.remaining} of {dailyUsage.limit} images remaining
+                  </span>
+                  <div className="flex gap-1">
+                    {[...Array(dailyUsage.limit)].map((_, i) => (
+                      <div
+                        key={i}
+                        className={`w-2 h-2 rounded-full ${
+                          i < dailyUsage.used ? 'bg-blue-300' : 'bg-blue-600'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+            )}
+          </div>
+
           {/* Additional Notes */}
           <div>
             <label className="block text-sm font-medium text-gray-900 mb-2">
@@ -426,11 +554,16 @@ ${additionalNotes ? `Additional notes: ${additionalNotes}` : ''}`
                 Copy
               </button>
               <button
-                onClick={handleTestWithNanoBanana}
-                disabled={isGeneratingImage}
+                onClick={handleGenerateImage}
+                disabled={isGeneratingImage || (imageModel === 'chatgpt' && dailyUsage?.remaining === 0)}
                 className="bg-gray-900 text-white px-4 py-2 text-sm hover:bg-gray-800 transition disabled:opacity-50"
               >
-                {isGeneratingImage ? 'Creating...' : '🍌 Create with Nano Banana Pro'}
+                {isGeneratingImage
+                  ? 'Creating...'
+                  : imageModel === 'chatgpt'
+                    ? `🎨 Create with ChatGPT ${dailyUsage ? `(${dailyUsage.remaining} left)` : ''}`
+                    : '🍌 Create with Nano Banana Pro'
+                }
               </button>
             </div>
           </div>
@@ -449,7 +582,9 @@ ${additionalNotes ? `Additional notes: ${additionalNotes}` : ''}`
       {isGeneratingImage && (
         <div className="border border-gray-200 p-12 text-center">
           <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-gray-900 mb-4"></div>
-          <p className="text-sm text-gray-600">Nano Banana Pro is creating your infographic...</p>
+          <p className="text-sm text-gray-600">
+            {imageModel === 'chatgpt' ? 'ChatGPT' : 'Nano Banana Pro'} is creating your infographic...
+          </p>
           <p className="text-xs text-gray-400 mt-2">This may take a moment for complex designs</p>
         </div>
       )}
@@ -460,7 +595,7 @@ ${additionalNotes ? `Additional notes: ${additionalNotes}` : ''}`
             <h3 className="font-serif text-xl text-gray-900">Your Infographic</h3>
             <div className="flex gap-2">
               <button
-                onClick={handleTestWithNanoBanana}
+                onClick={handleGenerateImage}
                 disabled={isGeneratingImage}
                 className="border border-gray-300 text-gray-700 px-4 py-2 text-sm hover:bg-gray-100 transition"
               >
