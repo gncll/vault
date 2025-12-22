@@ -1,6 +1,4 @@
-import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
-import Header from '@/app/components/Header'
 import SubscriptionCheck from '@/app/components/SubscriptionCheck'
 import { getPrompts } from '@/lib/github'
 import PromptCustomizer from './PromptCustomizer'
@@ -26,10 +24,6 @@ export default async function PromptDetailPage({ params }: { params: Promise<{ i
   return (
     <SubscriptionCheck>
       <div className="min-h-screen bg-white">
-        <Header showNav>
-          <UserButton afterSignOutUrl="/" />
-        </Header>
-
         <main className="max-w-4xl mx-auto px-6">
           <div className="py-16 border-b border-gray-200">
             <Link href="/prompts" className="text-xs text-gray-500 hover:text-gray-900 transition mb-4 inline-block">

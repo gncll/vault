@@ -1,12 +1,10 @@
 'use client'
 
-import { UserButton } from '@clerk/nextjs'
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 import { Document, Page, pdfjs } from 'react-pdf'
 import 'react-pdf/dist/Page/AnnotationLayer.css'
 import 'react-pdf/dist/Page/TextLayer.css'
-import Header from '@/app/components/Header'
 import ChatPanel from './ChatPanel'
 
 // Configure PDF.js worker
@@ -69,9 +67,6 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
   if (!project) {
     return (
       <div className="min-h-screen bg-white">
-        <Header showNav>
-          <UserButton afterSignOutUrl="/" />
-        </Header>
         <div className="max-w-6xl mx-auto px-6 py-20 text-center">
           <h2 className="font-serif text-2xl text-gray-900 mb-4">Project not found</h2>
           <Link href="/projects" className="text-sm text-gray-600 hover:text-gray-900 transition">
@@ -94,10 +89,6 @@ export default function ProjectViewer({ project }: { project: Project | null }) 
 
   return (
     <div className="min-h-screen bg-white">
-      <Header showNav>
-        <UserButton afterSignOutUrl="/" />
-      </Header>
-
       {/* Header with Tabs */}
       <div className="border-b border-gray-200 bg-gray-50 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-6 py-4">

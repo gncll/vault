@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useRef } from 'react'
 
 const INFOGRAPHIC_TYPES = [
   { value: 'comparison', label: 'Comparison', description: 'Compare two or more items side by side' },
@@ -31,6 +31,25 @@ const COLOR_SCHEMES = [
   { value: 'orange', label: 'Orange/Warm', colors: ['#ea580c', '#fb923c', '#fed7aa'] },
   { value: 'neutral', label: 'Neutral/Gray', colors: ['#374151', '#6b7280', '#d1d5db'] },
   { value: 'rainbow', label: 'Multi-color', colors: ['#ef4444', '#eab308', '#22c55e', '#3b82f6'] },
+  { value: 'custom', label: 'Custom Colors', colors: [] },
+]
+
+const INSPIRATION_STYLES = [
+  { value: '', label: 'None' },
+  { value: 'harry_potter', label: 'Harry Potter / Wizarding World', description: 'Magical, mystical, parchment textures' },
+  { value: 'lord_of_rings', label: 'Lord of the Rings / Fantasy', description: 'Epic, medieval, elvish aesthetics' },
+  { value: 'star_wars', label: 'Star Wars / Sci-Fi', description: 'Space opera, galactic, futuristic' },
+  { value: 'cyberpunk', label: 'Cyberpunk 2077', description: 'Neon lights, dystopian, high-tech' },
+  { value: 'studio_ghibli', label: 'Studio Ghibli / Anime', description: 'Whimsical, nature-inspired, soft colors' },
+  { value: 'marvel', label: 'Marvel / Comic Book', description: 'Bold, dynamic, superhero aesthetics' },
+  { value: 'disney', label: 'Disney / Pixar', description: 'Colorful, family-friendly, magical' },
+  { value: 'game_of_thrones', label: 'Game of Thrones', description: 'Dark, medieval, gritty realism' },
+  { value: 'stranger_things', label: 'Stranger Things / 80s', description: 'Retro 80s, nostalgic, neon' },
+  { value: 'matrix', label: 'The Matrix', description: 'Green code, digital rain, noir' },
+  { value: 'wes_anderson', label: 'Wes Anderson', description: 'Pastel colors, symmetry, quirky' },
+  { value: 'noir', label: 'Film Noir', description: 'Black & white, shadows, dramatic' },
+  { value: 'art_deco', label: 'Art Deco / Great Gatsby', description: 'Golden, geometric, 1920s elegance' },
+  { value: 'japanese', label: 'Japanese Traditional', description: 'Ukiyo-e, minimalist, zen aesthetics' },
 ]
 
 const ASPECT_RATIOS = [
@@ -47,8 +66,13 @@ export default function InfographicsClient() {
   const [infographicType, setInfographicType] = useState('comparison')
   const [visualStyle, setVisualStyle] = useState('modern')
   const [colorScheme, setColorScheme] = useState('blue')
+  const [customColors, setCustomColors] = useState<string[]>(['#3b82f6', '#10b981', '#f59e0b'])
+  const [currentColorIndex, setCurrentColorIndex] = useState<number | null>(null)
+  const [inspirationStyle, setInspirationStyle] = useState('')
   const [aspectRatio, setAspectRatio] = useState('1:1')
   const [additionalNotes, setAdditionalNotes] = useState('')
+
+  const colorPickerRef = useRef<HTMLInputElement>(null)
 
   const [generatedPrompt, setGeneratedPrompt] = useState('')
   const [isGeneratingPrompt, setIsGeneratingPrompt] = useState(false)
@@ -67,12 +91,20 @@ export default function InfographicsClient() {
     const typeInfo = INFOGRAPHIC_TYPES.find(t => t.value === infographicType)
     const styleInfo = VISUAL_STYLES.find(s => s.value === visualStyle)
     const colorInfo = COLOR_SCHEMES.find(c => c.value === colorScheme)
+    const inspirationInfo = INSPIRATION_STYLES.find(s => s.value === inspirationStyle)
+
+    // Get color description
+    let colorDescription = colorInfo?.label || ''
+    if (colorScheme === 'custom') {
+      colorDescription = `Custom colors: ${customColors.join(', ')}`
+    }
 
     const userInput = `Create an infographic about: ${topic}
 
 Type: ${typeInfo?.label} - ${typeInfo?.description}
 Visual Style: ${styleInfo?.label}
-Color Scheme: ${colorInfo?.label}
+Color Scheme: ${colorDescription}
+${inspirationStyle ? `Inspiration/Theme: ${inspirationInfo?.label} - ${inspirationInfo?.description}` : ''}
 ${additionalNotes ? `Additional notes: ${additionalNotes}` : ''}`
 
     try {
@@ -223,19 +255,113 @@ ${additionalNotes ? `Additional notes: ${additionalNotes}` : ''}`
                         : 'border-gray-200 hover:border-gray-400'
                     }`}
                   >
-                    <div className="flex gap-1 mb-1">
-                      {color.colors.map((c, i) => (
-                        <div
-                          key={i}
-                          className="w-4 h-4 rounded-full"
-                          style={{ backgroundColor: c }}
-                        />
-                      ))}
-                    </div>
+                    {color.value !== 'custom' ? (
+                      <div className="flex gap-1 mb-1">
+                        {color.colors.map((c, i) => (
+                          <div
+                            key={i}
+                            className="w-4 h-4 rounded-full"
+                            style={{ backgroundColor: c }}
+                          />
+                        ))}
+                      </div>
+                    ) : (
+                      <div className="flex gap-1 mb-1">
+                        <div className="w-4 h-4 rounded-full bg-gradient-to-r from-red-500 via-green-500 to-blue-500" />
+                        <span className="text-xs">+</span>
+                      </div>
+                    )}
                     <div className="text-xs text-gray-600">{color.label}</div>
                   </button>
                 ))}
               </div>
+
+              {/* Custom Color Picker */}
+              {colorScheme === 'custom' && (
+                <div className="mt-4 p-4 border border-gray-200 bg-gray-50">
+                  <label className="block text-sm font-medium text-gray-900 mb-3">
+                    Pick Your Colors
+                  </label>
+                  <div className="flex flex-wrap gap-3 mb-4">
+                    {customColors.map((color, index) => (
+                      <div key={index} className="relative">
+                        <button
+                          onClick={() => {
+                            setCurrentColorIndex(index)
+                            setTimeout(() => colorPickerRef.current?.click(), 0)
+                          }}
+                          className="w-12 h-12 rounded-lg border-2 border-gray-300 hover:border-gray-500 transition shadow-sm"
+                          style={{ backgroundColor: color }}
+                          title={color}
+                        />
+                        {customColors.length > 1 && (
+                          <button
+                            onClick={() => {
+                              setCustomColors(customColors.filter((_, i) => i !== index))
+                            }}
+                            className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white rounded-full text-xs hover:bg-red-600 transition"
+                          >
+                            ×
+                          </button>
+                        )}
+                      </div>
+                    ))}
+                    {customColors.length < 5 && (
+                      <button
+                        onClick={() => {
+                          setCustomColors([...customColors, '#6366f1'])
+                          setCurrentColorIndex(customColors.length)
+                          setTimeout(() => colorPickerRef.current?.click(), 0)
+                        }}
+                        className="w-12 h-12 rounded-lg border-2 border-dashed border-gray-300 hover:border-gray-500 transition flex items-center justify-center text-gray-400 hover:text-gray-600"
+                      >
+                        <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    ref={colorPickerRef}
+                    type="color"
+                    value={currentColorIndex !== null ? customColors[currentColorIndex] : '#3b82f6'}
+                    onChange={(e) => {
+                      if (currentColorIndex !== null) {
+                        const newColors = [...customColors]
+                        newColors[currentColorIndex] = e.target.value
+                        setCustomColors(newColors)
+                      }
+                    }}
+                    className="absolute opacity-0 pointer-events-none"
+                  />
+                  <p className="text-xs text-gray-500">Click on a color to change it. Add up to 5 colors.</p>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Inspiration Style */}
+          <div>
+            <label className="block text-sm font-medium text-gray-900 mb-2">
+              Inspiration / Theme Style <span className="text-gray-400">(optional)</span>
+            </label>
+            <div className="grid md:grid-cols-3 gap-2">
+              {INSPIRATION_STYLES.map((style) => (
+                <button
+                  key={style.value}
+                  onClick={() => setInspirationStyle(style.value)}
+                  className={`p-3 border text-left transition ${
+                    inspirationStyle === style.value
+                      ? 'border-gray-900 bg-gray-50'
+                      : 'border-gray-200 hover:border-gray-400'
+                  }`}
+                >
+                  <div className="font-medium text-sm text-gray-900">{style.label}</div>
+                  {style.description && (
+                    <div className="text-xs text-gray-500 mt-1">{style.description}</div>
+                  )}
+                </button>
+              ))}
             </div>
           </div>
 
