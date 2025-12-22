@@ -46,7 +46,7 @@ const INSPIRATION_STYLES = [
   { value: 'game_of_thrones', label: 'Game of Thrones', description: 'Dark, medieval, gritty realism' },
   { value: 'stranger_things', label: 'Stranger Things / 80s', description: 'Retro 80s, nostalgic, neon' },
   { value: 'matrix', label: 'The Matrix', description: 'Green code, digital rain, noir' },
-  { value: 'wes_anderson', label: 'Wes Anderson', description: 'Pastel colors, symmetry, quirky' },
+  { value: 'whiteboard', label: 'Whiteboard', description: 'Clean, hand-drawn markers, sketchy style' },
   { value: 'noir', label: 'Film Noir', description: 'Black & white, shadows, dramatic' },
   { value: 'art_deco', label: 'Art Deco / Great Gatsby', description: 'Golden, geometric, 1920s elegance' },
   { value: 'japanese', label: 'Japanese Traditional', description: 'Ukiyo-e, minimalist, zen aesthetics' },
