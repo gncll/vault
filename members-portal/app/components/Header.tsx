@@ -30,8 +30,18 @@ export default function Header() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div className="absolute top-full left-0 mt-2 w-48 bg-gray-800 border border-gray-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
-              <Link href="/customgpts" className="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition rounded-t-lg">
+            <div className="absolute top-full left-0 mt-2 w-56 bg-gray-800 border border-gray-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all">
+              <Link href="/tools/ai-writer" className="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition rounded-t-lg">
+                AI Humanizer
+              </Link>
+              <Link href="/tools/infographics" className="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition">
+                Infographics Studio
+              </Link>
+              <Link href="/tools/prompt-optimizer" className="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition">
+                Prompt Optimizer
+              </Link>
+              <div className="border-t border-gray-700 my-1"></div>
+              <Link href="/customgpts" className="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition">
                 Custom GPTs
               </Link>
               <Link href="/projects" className="block px-4 py-3 text-sm text-gray-300 hover:bg-gray-700 hover:text-white transition rounded-b-lg">
