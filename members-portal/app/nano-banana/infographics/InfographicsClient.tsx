@@ -11,18 +11,18 @@ const INFOGRAPHIC_TYPES = [
   { value: 'hierarchy', label: 'Hierarchy', description: 'Show organizational or ranking structure' },
   { value: 'map', label: 'Geographic', description: 'Location-based information' },
   { value: 'howto', label: 'How-To Guide', description: 'Step-by-step instructions' },
-  { value: 'whiteboard', label: 'Whiteboard', description: 'Clean hand-drawn marker style on white background' },
 ]
 
 const VISUAL_STYLES = [
   { value: 'modern', label: 'Modern Minimalist' },
   { value: 'corporate', label: 'Corporate Professional' },
   { value: 'playful', label: 'Playful & Colorful' },
-  { value: 'dark', label: 'Dark Theme' },
-  { value: 'vintage', label: 'Vintage Retro' },
-  { value: 'tech', label: 'Tech / Futuristic' },
-  { value: 'handdrawn', label: 'Hand-drawn Style' },
   { value: 'flat', label: 'Flat Design' },
+  { value: 'handdrawn', label: 'Hand-drawn Sketch' },
+  { value: 'whiteboard', label: 'Whiteboard' },
+  { value: '3d', label: '3D Rendered' },
+  { value: 'isometric', label: 'Isometric' },
+  { value: 'gradient', label: 'Gradient & Glassmorphism' },
 ]
 
 const COLOR_SCHEMES = [
@@ -37,19 +37,18 @@ const COLOR_SCHEMES = [
 
 const INSPIRATION_STYLES = [
   { value: '', label: 'None' },
-  { value: 'harry_potter', label: 'Harry Potter / Wizarding World', description: 'Magical, mystical, parchment textures' },
-  { value: 'lord_of_rings', label: 'Lord of the Rings / Fantasy', description: 'Epic, medieval, elvish aesthetics' },
-  { value: 'star_wars', label: 'Star Wars / Sci-Fi', description: 'Space opera, galactic, futuristic' },
-  { value: 'cyberpunk', label: 'Cyberpunk 2077', description: 'Neon lights, dystopian, high-tech' },
-  { value: 'studio_ghibli', label: 'Studio Ghibli / Anime', description: 'Whimsical, nature-inspired, soft colors' },
-  { value: 'marvel', label: 'Marvel / Comic Book', description: 'Bold, dynamic, superhero aesthetics' },
+  { value: 'harry_potter', label: 'Harry Potter', description: 'Magical, mystical, parchment textures' },
+  { value: 'lord_of_rings', label: 'Lord of the Rings', description: 'Epic, medieval, elvish aesthetics' },
+  { value: 'star_wars', label: 'Star Wars', description: 'Space opera, galactic, futuristic' },
+  { value: 'marvel', label: 'Marvel / DC Comics', description: 'Bold, dynamic, superhero aesthetics' },
   { value: 'disney', label: 'Disney / Pixar', description: 'Colorful, family-friendly, magical' },
+  { value: 'studio_ghibli', label: 'Studio Ghibli', description: 'Whimsical, nature-inspired, soft colors' },
   { value: 'game_of_thrones', label: 'Game of Thrones', description: 'Dark, medieval, gritty realism' },
-  { value: 'stranger_things', label: 'Stranger Things / 80s', description: 'Retro 80s, nostalgic, neon' },
-  { value: 'matrix', label: 'The Matrix', description: 'Green code, digital rain, noir' },
-  { value: 'noir', label: 'Film Noir', description: 'Black & white, shadows, dramatic' },
-  { value: 'art_deco', label: 'Art Deco / Great Gatsby', description: 'Golden, geometric, 1920s elegance' },
-  { value: 'japanese', label: 'Japanese Traditional', description: 'Ukiyo-e, minimalist, zen aesthetics' },
+  { value: 'stranger_things', label: 'Stranger Things', description: 'Retro 80s, nostalgic, neon' },
+  { value: 'matrix', label: 'The Matrix', description: 'Green code, digital rain, cyberpunk' },
+  { value: 'avatar', label: 'Avatar', description: 'Bioluminescent, alien nature, blue tones' },
+  { value: 'dune', label: 'Dune', description: 'Desert, epic scale, golden sand tones' },
+  { value: 'blade_runner', label: 'Blade Runner', description: 'Neon noir, rainy dystopia, futuristic' },
 ]
 
 const ASPECT_RATIOS = [
