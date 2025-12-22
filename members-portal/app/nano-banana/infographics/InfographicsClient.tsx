@@ -11,6 +11,7 @@ const INFOGRAPHIC_TYPES = [
   { value: 'hierarchy', label: 'Hierarchy', description: 'Show organizational or ranking structure' },
   { value: 'map', label: 'Geographic', description: 'Location-based information' },
   { value: 'howto', label: 'How-To Guide', description: 'Step-by-step instructions' },
+  { value: 'whiteboard', label: 'Whiteboard', description: 'Clean hand-drawn marker style on white background' },
 ]
 
 const VISUAL_STYLES = [
@@ -46,7 +47,6 @@ const INSPIRATION_STYLES = [
   { value: 'game_of_thrones', label: 'Game of Thrones', description: 'Dark, medieval, gritty realism' },
   { value: 'stranger_things', label: 'Stranger Things / 80s', description: 'Retro 80s, nostalgic, neon' },
   { value: 'matrix', label: 'The Matrix', description: 'Green code, digital rain, noir' },
-  { value: 'whiteboard', label: 'Whiteboard', description: 'Clean, hand-drawn markers, sketchy style' },
   { value: 'noir', label: 'Film Noir', description: 'Black & white, shadows, dramatic' },
   { value: 'art_deco', label: 'Art Deco / Great Gatsby', description: 'Golden, geometric, 1920s elegance' },
   { value: 'japanese', label: 'Japanese Traditional', description: 'Ukiyo-e, minimalist, zen aesthetics' },
