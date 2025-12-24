@@ -1,5 +1,4 @@
 import Link from "next/link";
-import Image from "next/image";
 import { SignInButton, SignedIn, SignedOut } from '@clerk/nextjs'
 import HomeCategories from './components/HomeCategories'
 import { getPrompts } from '@/lib/github'
@@ -62,24 +61,88 @@ export default async function Home() {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Hero Section */}
-      <section className="bg-white py-16 md:py-20 px-6">
+      <section className="bg-white py-20 md:py-32 px-6">
         <div className="max-w-4xl mx-auto text-center">
-          <h1 className="font-serif text-3xl md:text-5xl text-gray-900 mb-4 leading-tight">
-            The Vault
+          {/* Main Headline */}
+          <h1 className="text-4xl md:text-6xl font-black text-gray-900 mb-2 leading-tight">
+            Build the Future
           </h1>
-          {/* Golden Key Image */}
-          <div className="flex items-center justify-center mb-6">
-            <Image
-              src="/key.png"
-              alt="Golden Key"
-              width={180}
-              height={180}
-              className="object-contain"
-            />
+          <div className="inline-block bg-gray-900 text-white px-6 py-3 rounded-lg mb-8">
+            <span className="text-4xl md:text-6xl font-black">In One Click.</span>
           </div>
-          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Unlock the vault to reach your private collection of prompts and AI tools to save you hours every day.
+          {/* Subheadline */}
+          <p className="text-lg md:text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed mb-12">
+            Save hours each day using prompts and AI tools to build and evolve.
           </p>
+          {/* CTA Buttons */}
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Link
+              href="/prompts"
+              className="px-8 py-4 bg-gray-900 text-white text-sm font-semibold hover:bg-gray-800 rounded-full transition text-center"
+            >
+              Explore Prompts
+            </Link>
+            <a
+              href="https://www.learnwithmeai.com/subscribe"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-8 py-4 bg-yellow-300 text-gray-900 text-sm font-semibold hover:bg-yellow-400 rounded-full transition text-center"
+            >
+              Unlock Full Features
+            </a>
+          </div>
+        </div>
+      </section>
+
+      {/* Quick Links Section */}
+      <section className="bg-gray-900 py-20 px-6">
+        <div className="max-w-5xl mx-auto">
+          <div className="grid md:grid-cols-3 gap-12 text-center">
+            {/* Prompt Library */}
+            <div>
+              <div className="text-5xl mb-5">📚</div>
+              <h3 className="text-2xl font-bold text-white mb-3">Prompt Library</h3>
+              <p className="text-gray-400 text-base mb-6">
+                172+ tested prompts for ChatGPT, Claude & Midjourney.
+              </p>
+              <Link
+                href="/prompts"
+                className="inline-block px-8 py-3 bg-white text-gray-900 text-sm font-semibold rounded-full hover:bg-gray-100 transition"
+              >
+                Explore &gt;
+              </Link>
+            </div>
+
+            {/* AI Tools */}
+            <div>
+              <div className="text-5xl mb-5">🛠️</div>
+              <h3 className="text-2xl font-bold text-white mb-3">AI Tools</h3>
+              <p className="text-gray-400 text-base mb-6">
+                Humanizer, Infographics Studio, Prompt Optimizer & more.
+              </p>
+              <Link
+                href="/tools"
+                className="inline-block px-8 py-3 bg-white text-gray-900 text-sm font-semibold rounded-full hover:bg-gray-100 transition"
+              >
+                Try Now &gt;
+              </Link>
+            </div>
+
+            {/* Need Help */}
+            <div>
+              <div className="text-5xl mb-5">💬</div>
+              <h3 className="text-2xl font-bold text-white mb-3">Need Help?</h3>
+              <p className="text-gray-400 text-base mb-6">
+                Reach out and we will respond within 24 hours.
+              </p>
+              <a
+                href="mailto:gencay@learnwithmeai.com"
+                className="inline-block px-8 py-3 bg-white text-gray-900 text-sm font-semibold rounded-full hover:bg-gray-100 transition"
+              >
+                Contact &gt;
+              </a>
+            </div>
+          </div>
         </div>
       </section>
 
