@@ -103,7 +103,7 @@ export default async function Home() {
               <div className="text-5xl mb-5">📚</div>
               <h3 className="text-2xl font-bold text-white mb-3">Prompt Library</h3>
               <p className="text-gray-400 text-base mb-6">
-                172+ tested prompts for ChatGPT, Claude & Midjourney.
+                640+ tested prompts for ChatGPT, Claude & Midjourney.
               </p>
               <Link
                 href="/prompts"
