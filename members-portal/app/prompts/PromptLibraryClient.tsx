@@ -18,18 +18,18 @@ interface PromptLibraryClientProps {
   imagePrompts: Prompt[]
 }
 
-// Primary category icons and colors
-const primaryCategoryConfig: Record<string, { icon: string; color: string }> = {
-  'Analysis': { icon: '🔍', color: 'from-blue-500 to-blue-600' },
-  'Business': { icon: '💼', color: 'from-slate-600 to-slate-700' },
-  'Career': { icon: '🎯', color: 'from-purple-500 to-purple-600' },
-  'Coding': { icon: '💻', color: 'from-green-500 to-green-600' },
-  'Creative': { icon: '🎨', color: 'from-pink-500 to-pink-600' },
-  'Education': { icon: '📚', color: 'from-yellow-500 to-yellow-600' },
-  'Finance': { icon: '💰', color: 'from-emerald-500 to-emerald-600' },
-  'Marketing': { icon: '📣', color: 'from-orange-500 to-orange-600' },
-  'Productivity': { icon: '⚡', color: 'from-cyan-500 to-cyan-600' },
-  'Writing': { icon: '✍️', color: 'from-indigo-500 to-indigo-600' },
+// Primary category icons
+const primaryCategoryIcons: Record<string, string> = {
+  'Analysis': '🔍',
+  'Business': '💼',
+  'Career': '🎯',
+  'Coding': '💻',
+  'Creative': '🎨',
+  'Education': '📚',
+  'Finance': '💰',
+  'Marketing': '📣',
+  'Productivity': '⚡',
+  'Writing': '✍️',
 }
 
 export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: PromptLibraryClientProps) {
@@ -52,7 +52,7 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
       .map(([name, count]) => ({
         name,
         count,
-        ...primaryCategoryConfig[name] || { icon: '📄', color: 'from-gray-500 to-gray-600' }
+        icon: primaryCategoryIcons[name] || '📄'
       }))
       .sort((a, b) => b.count - a.count)
   }, [currentPrompts])
@@ -160,16 +160,27 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
             <h2 className="text-2xl font-bold text-gray-900 mb-6">
               {activeTab === 'chatgpt' ? 'ChatGPT Prompt Categories' : 'Image Prompt Categories'}
             </h2>
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
               {primaryCategories.map((category) => (
                 <button
                   key={category.name}
                   onClick={() => setSelectedPrimaryCategory(category.name)}
-                  className={`bg-gradient-to-br ${category.color} rounded-2xl p-6 text-left hover:scale-105 transition-transform duration-200 shadow-lg hover:shadow-xl`}
+                  className="group bg-gray-900 hover:bg-gray-800 rounded-2xl p-6 text-left transition-all hover:scale-[1.02]"
                 >
-                  <div className="text-4xl mb-3">{category.icon}</div>
-                  <h3 className="text-lg font-bold text-white mb-1">{category.name}</h3>
-                  <p className="text-white/80 text-sm">{category.count} Prompts</p>
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-xl">{category.icon}</span>
+                        <h3 className="font-semibold text-white text-lg">{category.name}</h3>
+                      </div>
+                      <p className="text-gray-400 text-sm">{category.count} Prompts</p>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center group-hover:bg-white/20 transition">
+                      <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
                 </button>
               ))}
             </div>
@@ -193,7 +204,7 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
             {/* Category Title */}
             <div className="flex items-center gap-4 mb-6">
               <span className="text-5xl">
-                {primaryCategoryConfig[selectedPrimaryCategory]?.icon || '📄'}
+                {primaryCategoryIcons[selectedPrimaryCategory] || '📄'}
               </span>
               <div>
                 <h2 className="text-3xl font-bold text-gray-900">{selectedPrimaryCategory}</h2>

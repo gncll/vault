@@ -4,26 +4,19 @@ import HomeCategories from './components/HomeCategories'
 import { getPrompts } from '@/lib/github'
 import nanoBananaPrompts from '@/data/nano-banana-prompts.json'
 
-// Category icon mapping
+// Primary category icon mapping
 const categoryIcons: Record<string, string> = {
+  // Primary categories for ChatGPT prompts
   'Analysis': '🔍',
   'Business': '💼',
-  'Career': '💼',
-  'Content': '📝',
-  'Conversation': '💬',
-  'Critical Thinking': '🧠',
-  'Learning': '📚',
-  'Meta': '🎯',
-  'Productivity': '⚡',
-  'Recommendations': '⭐',
-  'Research': '🔬',
-  'Strategy': '♟️',
-  'Summarization': '📋',
-  'Development': '💻',
-  'Data Science': '📊',
-  'Documentation': '📝',
-  'Writing': '✍️',
+  'Career': '🎯',
+  'Coding': '💻',
+  'Creative': '🎨',
+  'Education': '📚',
+  'Finance': '💰',
   'Marketing': '📣',
+  'Productivity': '⚡',
+  'Writing': '✍️',
   // Image categories
   'Photorealism & Aesthetics': '📸',
   'Creative Experiments': '🎨',
@@ -37,10 +30,10 @@ const categoryIcons: Record<string, string> = {
   'Interior Design': '🏠',
 }
 
-function getCategoryCounts(prompts: any[]) {
+function getCategoryCounts(prompts: any[], usePrimaryCategory = false) {
   const counts: Record<string, number> = {}
   prompts.forEach(p => {
-    const cat = p.category || 'Other'
+    const cat = usePrimaryCategory ? (p.primaryCategory || p.category || 'Other') : (p.category || 'Other')
     counts[cat] = (counts[cat] || 0) + 1
   })
   return Object.entries(counts)
@@ -55,8 +48,8 @@ function getCategoryCounts(prompts: any[]) {
 export default async function Home() {
   const chatgptPrompts = await getPrompts()
 
-  const chatgptCategories = getCategoryCounts(chatgptPrompts)
-  const imageCategories = getCategoryCounts(nanoBananaPrompts)
+  const chatgptCategories = getCategoryCounts(chatgptPrompts, true) // Use primaryCategory
+  const imageCategories = getCategoryCounts(nanoBananaPrompts, false) // Use category for images
 
   return (
     <div className="min-h-screen bg-gray-50">
