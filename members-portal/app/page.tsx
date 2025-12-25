@@ -201,13 +201,15 @@ export default async function Home() {
             <div className="grid md:grid-cols-3 gap-8">
               {/* Photo */}
               <div className="flex justify-center md:justify-start">
-                <Image
-                  src="/me.png"
-                  alt="Gencay"
-                  width={220}
-                  height={220}
-                  className="rounded-full border-4 border-white shadow-lg"
-                />
+                <div className="w-[220px] h-[220px] rounded-full border-4 border-white shadow-lg overflow-hidden">
+                  <Image
+                    src="/me.png"
+                    alt="Gencay"
+                    width={220}
+                    height={220}
+                    className="w-full h-full object-cover"
+                  />
+                </div>
               </div>
 
               {/* Story - Column 1 */}
