@@ -34,10 +34,35 @@ export default function PromptCustomizer({ prompt }: { prompt: Prompt }) {
 
     // Replace placeholders in prompt with form data
     let result = prompt.prompt
+    let hasReplacements = false
+
+    // Try to replace {key} and ${key} placeholders
     Object.keys(formData).forEach(key => {
-      const placeholder = `{${key}}`
-      result = result.replace(new RegExp(placeholder, 'g'), formData[key])
+      const placeholder1 = `{${key}}`
+      const placeholder2 = `\${${key}}`
+      const placeholder3 = `\${${key}:`  // For ${key:default} format
+
+      if (result.includes(placeholder1) || result.includes(placeholder2) || result.includes(placeholder3)) {
+        hasReplacements = true
+        result = result.replace(new RegExp(`\\{${key}\\}`, 'g'), formData[key])
+        result = result.replace(new RegExp(`\\$\\{${key}\\}`, 'g'), formData[key])
+        result = result.replace(new RegExp(`\\$\\{${key}:[^}]*\\}`, 'g'), formData[key])
+      }
     })
+
+    // If no placeholders were found, append context to the prompt
+    if (!hasReplacements && Object.keys(formData).length > 0) {
+      const contextLines: string[] = []
+      prompt.customizableFields?.forEach(field => {
+        if (formData[field.name]) {
+          contextLines.push(`${field.label}: ${formData[field.name]}`)
+        }
+      })
+
+      if (contextLines.length > 0) {
+        result = result.trim() + '\n\n---\nContext:\n' + contextLines.join('\n')
+      }
+    }
 
     setCustomizedPrompt(result)
   }
