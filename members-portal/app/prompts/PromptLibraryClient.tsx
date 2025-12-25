@@ -32,12 +32,15 @@ const primaryCategoryIcons: Record<string, string> = {
   'Writing': '✍️',
 }
 
+const PROMPTS_PER_PAGE = 12
+
 export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: PromptLibraryClientProps) {
   const [activeTab, setActiveTab] = useState<'chatgpt' | 'image'>('chatgpt')
   const [selectedPrimaryCategory, setSelectedPrimaryCategory] = useState<string | null>(null)
   const [selectedTags, setSelectedTags] = useState<string[]>([])
   const [copiedId, setCopiedId] = useState<number | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
+  const [currentPage, setCurrentPage] = useState(1)
 
   const currentPrompts = activeTab === 'chatgpt' ? chatgptPrompts : imagePrompts
 
@@ -91,12 +94,20 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
     })
   }, [categoryPrompts, selectedTags, searchTerm])
 
+  // Pagination
+  const totalPages = Math.ceil(filteredPrompts.length / PROMPTS_PER_PAGE)
+  const paginatedPrompts = useMemo(() => {
+    const start = (currentPage - 1) * PROMPTS_PER_PAGE
+    return filteredPrompts.slice(start, start + PROMPTS_PER_PAGE)
+  }, [filteredPrompts, currentPage])
+
   const toggleTag = (tag: string) => {
     setSelectedTags(prev =>
       prev.includes(tag)
         ? prev.filter(t => t !== tag)
         : [...prev, tag]
     )
+    setCurrentPage(1)
   }
 
   const handleTabChange = (tab: 'chatgpt' | 'image') => {
@@ -104,12 +115,19 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
     setSelectedPrimaryCategory(null)
     setSelectedTags([])
     setSearchTerm('')
+    setCurrentPage(1)
   }
 
   const handleBackToCategories = () => {
     setSelectedPrimaryCategory(null)
     setSelectedTags([])
     setSearchTerm('')
+    setCurrentPage(1)
+  }
+
+  const handleCategorySelect = (categoryName: string) => {
+    setSelectedPrimaryCategory(categoryName)
+    setCurrentPage(1)
   }
 
   const copyToClipboard = (prompt: string, id: number) => {
@@ -164,7 +182,7 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
               {primaryCategories.map((category) => (
                 <button
                   key={category.name}
-                  onClick={() => setSelectedPrimaryCategory(category.name)}
+                  onClick={() => handleCategorySelect(category.name)}
                   className="group bg-gray-900 hover:bg-gray-800 rounded-2xl p-6 text-left transition-all hover:scale-[1.02]"
                 >
                   <div className="flex items-start justify-between">
@@ -224,7 +242,10 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
                   type="text"
                   placeholder="Search prompts..."
                   value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
+                  onChange={(e) => {
+                    setSearchTerm(e.target.value)
+                    setCurrentPage(1)
+                  }}
                   className="w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl text-sm focus:outline-none focus:border-gray-400 focus:ring-1 focus:ring-gray-200 transition"
                 />
               </div>
@@ -254,7 +275,7 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
 
             {/* Prompts Grid */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filteredPrompts.map((prompt) => (
+              {paginatedPrompts.map((prompt) => (
                 <div
                   key={`${activeTab}-${prompt.id}`}
                   className="bg-white border border-gray-200 rounded-xl p-5 hover:shadow-lg transition-shadow flex flex-col"
@@ -348,6 +369,82 @@ export default function PromptLibraryClient({ chatgptPrompts, imagePrompts }: Pr
             {filteredPrompts.length === 0 && (
               <div className="py-20 text-center text-sm text-gray-500">
                 No prompts found matching your criteria.
+              </div>
+            )}
+
+            {/* Pagination */}
+            {totalPages > 1 && (
+              <div className="flex items-center justify-center gap-2 mt-10">
+                {/* Previous Button */}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                  disabled={currentPage === 1}
+                  className={`flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition ${
+                    currentPage === 1
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                  </svg>
+                  Previous
+                </button>
+
+                {/* Page Numbers */}
+                <div className="flex items-center gap-1">
+                  {Array.from({ length: totalPages }, (_, i) => i + 1)
+                    .filter(page => {
+                      // Show first, last, current, and adjacent pages
+                      return page === 1 ||
+                        page === totalPages ||
+                        Math.abs(page - currentPage) <= 1
+                    })
+                    .map((page, index, array) => {
+                      // Add ellipsis
+                      const showEllipsisBefore = index > 0 && page - array[index - 1] > 1
+                      return (
+                        <span key={page} className="flex items-center">
+                          {showEllipsisBefore && (
+                            <span className="px-2 text-gray-400">...</span>
+                          )}
+                          <button
+                            onClick={() => setCurrentPage(page)}
+                            className={`w-10 h-10 rounded-lg text-sm font-medium transition ${
+                              currentPage === page
+                                ? 'bg-gray-900 text-white'
+                                : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                            }`}
+                          >
+                            {page}
+                          </button>
+                        </span>
+                      )
+                    })}
+                </div>
+
+                {/* Next Button */}
+                <button
+                  onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                  disabled={currentPage === totalPages}
+                  className={`flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition ${
+                    currentPage === totalPages
+                      ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Next
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            {/* Showing X of Y */}
+            {filteredPrompts.length > 0 && (
+              <div className="text-center mt-4 text-sm text-gray-500">
+                Showing {(currentPage - 1) * PROMPTS_PER_PAGE + 1}-{Math.min(currentPage * PROMPTS_PER_PAGE, filteredPrompts.length)} of {filteredPrompts.length} prompts
               </div>
             )}
           </>

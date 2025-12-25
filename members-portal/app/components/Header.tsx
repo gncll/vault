@@ -49,30 +49,9 @@ export default function Header() {
               </Link>
             </div>
           </div>
-          <a
-            href="https://learnwithmeai.com/"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-base text-gray-300 hover:text-white transition"
-          >
-            Blog
-          </a>
-          <a
-            href="https://www.learnwithmeai.com/about"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-base text-gray-300 hover:text-white transition"
-          >
-            About
-          </a>
-          <a
-            href="https://www.learnwithmeai.com/subscribe"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-base text-gray-300 hover:text-white transition"
-          >
+          <Link href="/subscribe" className="text-base text-gray-300 hover:text-white transition">
             Subscribe
-          </a>
+          </Link>
           <SignedOut>
             <SignInButton mode="modal">
               <button className="text-base text-gray-300 hover:text-white transition">
