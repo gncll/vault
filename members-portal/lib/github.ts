@@ -14,29 +14,47 @@ const GITHUB_BRANCH = process.env.NEXT_PUBLIC_GITHUB_BRANCH || 'main'
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN // Optional, for private repos
 
 async function fetchGitHubFile(path: string): Promise<any> {
-  const url = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}?ref=${GITHUB_BRANCH}`
-
-  const headers: HeadersInit = {
-    'Accept': 'application/vnd.github.v3+json',
-  }
+  const headers: HeadersInit = {}
 
   if (GITHUB_TOKEN) {
-    headers['Authorization'] = `Bearer ${GITHUB_TOKEN}`
+    headers['Authorization'] = `token ${GITHUB_TOKEN}`
   }
 
-  const response = await fetch(url, {
+  // Use raw content URL for private repos with token
+  const rawUrl = `https://raw.githubusercontent.com/${GITHUB_OWNER}/${GITHUB_REPO}/${GITHUB_BRANCH}/${path}`
+
+  const response = await fetch(rawUrl, {
     headers,
     next: { revalidate: 10 } // Revalidate every 10 seconds
   })
 
   if (!response.ok) {
-    throw new Error(`GitHub API error: ${response.status}`)
+    // Fallback to API method for smaller files
+    const apiUrl = `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${path}?ref=${GITHUB_BRANCH}`
+
+    const apiHeaders: HeadersInit = {
+      'Accept': 'application/vnd.github.v3+json',
+    }
+
+    if (GITHUB_TOKEN) {
+      apiHeaders['Authorization'] = `Bearer ${GITHUB_TOKEN}`
+    }
+
+    const apiResponse = await fetch(apiUrl, {
+      headers: apiHeaders,
+      next: { revalidate: 10 }
+    })
+
+    if (!apiResponse.ok) {
+      throw new Error(`GitHub API error: ${apiResponse.status}`)
+    }
+
+    const data: GitHubContentResponse = await apiResponse.json()
+    const content = Buffer.from(data.content, 'base64').toString('utf-8')
+    return JSON.parse(content)
   }
 
-  const data: GitHubContentResponse = await response.json()
-
-  // Decode base64 content
-  const content = Buffer.from(data.content, 'base64').toString('utf-8')
+  const content = await response.text()
   return JSON.parse(content)
 }
 
