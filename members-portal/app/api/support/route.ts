@@ -42,6 +42,11 @@ export async function POST(request: NextRequest) {
             },
           ],
         },
+        Status: {
+          status: {
+            name: 'Not Started',
+          },
+        },
       },
     })
 
