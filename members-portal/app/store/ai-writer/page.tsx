@@ -8,8 +8,8 @@ export default function AIHumanizerPage() {
       <div className="min-h-screen bg-white">
         <main className="max-w-6xl mx-auto px-6">
           <div className="py-16 border-b border-gray-200">
-            <Link href="/tools" className="text-xs text-gray-500 hover:text-gray-900 transition mb-4 inline-block">
-              ← Back to AI Tools
+            <Link href="/store" className="text-xs text-gray-500 hover:text-gray-900 transition mb-4 inline-block">
+              ← Back to Store
             </Link>
             <div className="flex items-center gap-4 mb-3">
               <span className="text-4xl">🧑</span>

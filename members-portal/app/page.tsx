@@ -123,15 +123,15 @@ export default async function Home() {
               </Link>
             </div>
 
-            {/* AI Tools */}
+            {/* Vault Store */}
             <div>
               <div className="text-5xl mb-5">🛠️</div>
-              <h3 className="text-2xl font-bold text-white mb-3">AI Tools</h3>
+              <h3 className="text-2xl font-bold text-white mb-3">Vault Store</h3>
               <p className="text-gray-400 text-base mb-6">
                 Humanizer, Infographics Studio, Prompt Optimizer & more.
               </p>
               <Link
-                href="/tools"
+                href="/store"
                 className="inline-block px-8 py-3 bg-white text-gray-900 text-sm font-semibold rounded-full hover:bg-gray-100 transition"
               >
                 Try Now &gt;
