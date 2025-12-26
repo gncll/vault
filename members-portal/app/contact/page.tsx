@@ -133,15 +133,6 @@ export default function ContactPage() {
           </button>
         </form>
 
-        {/* Alternative Contact */}
-        <div className="mt-12 pt-8 border-t border-gray-200 text-center">
-          <p className="text-sm text-gray-500">
-            Or email us directly at{' '}
-            <a href="mailto:gencay@learnwithmeai.com" className="text-gray-900 hover:underline">
-              gencay@learnwithmeai.com
-            </a>
-          </p>
-        </div>
       </div>
     </div>
   )
