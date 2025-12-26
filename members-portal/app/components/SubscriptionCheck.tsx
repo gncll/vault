@@ -68,8 +68,8 @@ export default function SubscriptionCheck({ children }: { children: React.ReactN
       <div className="min-h-screen flex items-center justify-center bg-white">
         <div className="text-center max-w-2xl px-6">
           <h1 className="font-serif text-5xl text-gray-900 mb-4">Subscribe to See</h1>
-          <p className="text-xl text-gray-600 mb-12">
-            Get access to exclusive AI news, insights, and resources
+          <p className="text-gray-500 mb-8">
+            Become a paid subscriber on Substack and sign in with the same email here to access all content.
           </p>
 
           <div className="flex justify-center mb-8">
