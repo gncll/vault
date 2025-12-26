@@ -145,12 +145,12 @@ export default async function Home() {
               <p className="text-gray-400 text-base mb-6">
                 Reach out and we will respond within 24 hours.
               </p>
-              <a
-                href="mailto:gencay@learnwithmeai.com"
+              <Link
+                href="/contact"
                 className="inline-block px-8 py-3 bg-white text-gray-900 text-sm font-semibold rounded-full hover:bg-gray-100 transition"
               >
                 Contact &gt;
-              </a>
+              </Link>
             </div>
           </div>
         </div>
