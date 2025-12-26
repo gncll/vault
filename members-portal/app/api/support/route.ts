@@ -31,13 +31,7 @@ export async function POST(request: NextRequest) {
           ],
         },
         Email: {
-          rich_text: [
-            {
-              text: {
-                content: email,
-              },
-            },
-          ],
+          email: email,
         },
         Message: {
           rich_text: [
@@ -49,7 +43,7 @@ export async function POST(request: NextRequest) {
           ],
         },
         Status: {
-          select: {
+          status: {
             name: 'New',
           },
         },
